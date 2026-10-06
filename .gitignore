@@ -1,25 +1,26 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# ── Dependencies ──────────────────────────────────────────────────────────────
+# Dependencies
 node_modules/
 .pnp
 .pnp.js
 .yarn/install-state.gz
 
-# ── Next.js build output ───────────────────────────────────────────────────────
+# Next.js build output
+.next/
 smart-apparel-solutions/.next/
 smart-apparel-solutions/out/
 smart-apparel-solutions/.turbo/
 
-# ── Production build ──────────────────────────────────────────────────────────
+# Production build
 smart-apparel-solutions/build/
 dist/
 
-# ── Testing ───────────────────────────────────────────────────────────────────
+# Testing
 coverage/
 .nyc_output/
 
-# ── Environment variables ─────────────────────────────────────────────────────
+# Environment variables
 .env
 .env.local
 .env.development.local
@@ -27,21 +28,21 @@ coverage/
 .env.production.local
 .env*.local
 
-# ── Debug logs ────────────────────────────────────────────────────────────────
+# Debug logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# ── TypeScript ────────────────────────────────────────────────────────────────
+# TypeScript
 *.tsbuildinfo
 smart-apparel-solutions/next-env.d.ts
 
-# ── Vercel ────────────────────────────────────────────────────────────────────
+# Vercel
 .vercel
 
-# ── OS / Editor ───────────────────────────────────────────────────────────────
+# OS / Editor
 .DS_Store
 *.pem
 Thumbs.db
@@ -50,8 +51,6 @@ Thumbs.db
 !.vscode/settings.json
 .idea/
 
-# ── Misc ──────────────────────────────────────────────────────────────────────
+# Misc
 *.local
 .cache/
-
-\.next\
