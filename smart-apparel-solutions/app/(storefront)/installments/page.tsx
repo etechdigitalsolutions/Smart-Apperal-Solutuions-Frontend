@@ -1,0 +1,7 @@
+import config from "@/config";
+import { products } from "@/data/products";
+import { formatCurrency } from "@/lib/utils/helpers";
+
+export default function InstallmentsPage() {
+  return <main className="page-shell"><div className="container"><div className="page-heading"><p className="eyebrow">Flexible payments</p><h1>Spread your machine investment with Koko</h1><p>Selected equipment can be paid in three installments. We will confirm eligibility and the exact schedule before your order is processed.</p></div><div className="installment-grid"><div className="page-card"><strong>3 equal installments</strong><p>Make your production upgrade easier to plan with transparent monthly pricing.</p></div><div className="page-card"><strong>No complicated quoting</strong><p>Add equipment to your quotation cart and ask our team to confirm the Koko option.</p></div><div className="page-card"><strong>Local support</strong><p>Our Colombo team can help with product selection, delivery and after-sales questions.</p></div></div><section className="page-card installment-table"><h2>Example eligible products</h2>{products.filter((product) => product.installment).slice(0, 6).map((product) => <div key={product.id}><span>{product.name}</span><strong>{formatCurrency(product.installment?.perMonth ?? 0)} / month</strong></div>)}</section><p>Questions? Call {config.phone} or <a className="link-arrow" href={config.whatsappUrl}>message us on WhatsApp</a>.</p></div></main>;
+}
