@@ -1,7 +1,17 @@
 // General utility functions
 
-export function formatCurrency(amount: number, currency = "USD"): string {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(amount);
+export function formatCurrency(amount: number, currency = "LKR"): string {
+  const safeAmount = Number.isFinite(amount) ? amount : 0;
+  const formatted = new Intl.NumberFormat("en-LK", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(Math.round(safeAmount));
+
+  if (currency === "LKR") {
+    return `රු${formatted}`;
+  }
+
+  return `Rs. ${formatted}`;
 }
 
 export function truncate(str: string, maxLength: number): string {
