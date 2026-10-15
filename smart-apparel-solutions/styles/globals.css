@@ -1476,6 +1476,245 @@ input[type="checkbox"] { width: auto; }
   .sort-control select { width: 100%; }
 }
 
+/* ============================================================
+   CART PAGE + CART SUMMARY
+   Keep this block AFTER the shared
+   ".filter-panel, .product-detail-card, .cart-summary, .page-card"
+   rule so the cart overrides win.
+   ============================================================ */
+
+.cart-page {
+  padding-block: 2.5rem 5rem;
+}
+
+.cart-page h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 2rem;
+}
+
+.cart-empty p {
+  margin-bottom: 1.5rem;
+}
+
+/* ---------- Layout ---------- */
+.cart-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 3rem;
+  align-items: start;
+}
+
+/* ---------- Items ---------- */
+.cart-item {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 1.5rem;
+  padding-bottom: 1.75rem;
+  margin-bottom: 1.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cart-item-media {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.cart-item-media img {
+  object-fit: contain;
+}
+
+.cart-item-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cart-item-brand {
+  margin-bottom: 0.3rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cart-item-name {
+  font-size: 1.05rem;
+  line-height: 1.4;
+}
+
+.cart-item-name a:hover {
+  color: var(--color-accent);
+}
+
+.cart-item-total {
+  white-space: nowrap;
+  color: var(--color-heading);
+}
+
+.cart-item-meta {
+  font-size: 0.88rem;
+}
+
+.cart-item-meta p {
+  margin-top: 0.2rem;
+}
+
+.cart-item-price {
+  display: block;
+  margin-top: 0.6rem;
+  color: var(--color-text);
+}
+
+.cart-item-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.1rem;
+}
+
+.qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  height: 2.75rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.qty-stepper button {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 100%;
+  color: var(--color-text);
+}
+
+.qty-stepper button:hover:not(:disabled) {
+  background: var(--color-surface-2);
+}
+
+.qty-stepper button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.qty-stepper span {
+  min-width: 2rem;
+  text-align: center;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.cart-item-remove {
+  display: grid;
+  place-items: center;
+  padding: 0.35rem;
+  color: var(--color-text-secondary);
+  transition: color var(--transition);
+}
+
+.cart-item-remove:hover {
+  color: var(--color-accent);
+}
+
+.cart-clear {
+  color: var(--color-text-secondary);
+  text-decoration: underline;
+}
+
+.cart-clear:hover {
+  color: var(--color-accent);
+}
+
+/* ---------- Summary ----------
+   Base look (surface, border, 18px radius, shadow) already comes from the
+   shared ".cart-summary" rule; only cart-specific bits are added here. */
+.cart-summary {
+  position: sticky;
+  top: 6rem;
+  padding: 2rem;
+}
+
+.cart-summary h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.cart-summary-section {
+  border-block: 1px solid var(--color-border);
+}
+
+.cart-note-toggle {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 1.25rem;
+  color: var(--color-text);
+  text-align: left;
+}
+
+.cart-note-toggle .chevron {
+  transition: transform var(--transition);
+}
+
+.cart-note-toggle .chevron.open {
+  transform: rotate(180deg);
+}
+
+.cart-note-input {
+  min-height: 0;
+  margin-bottom: 1.25rem;
+}
+
+.cart-summary-hint {
+  margin-block: 1.25rem 1.5rem;
+  font-size: 0.95rem;
+}
+
+.cart-summary-subtotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.5rem;
+  font-size: 1.15rem;
+  color: var(--color-heading);
+}
+
+.cart-summary-subtotal strong {
+  font-family: var(--font-heading);
+}
+
+.cart-checkout-btn {
+  width: 100%;
+  gap: 0.6rem;
+  padding-block: 1rem;
+  border-radius: 999px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 980px) {
+  .cart-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .cart-summary {
+    position: static;
+  }
+}
+
+@media (max-width: 560px) {
+  .cart-item {
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 1rem;
+  }
+}
+
 /* ---------- Print (quotation) ---------- */
 @media print {
   .no-print { display: none !important; }
