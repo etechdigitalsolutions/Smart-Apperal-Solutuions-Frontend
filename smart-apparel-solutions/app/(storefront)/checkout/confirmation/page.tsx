@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 import { useCart } from "@/hooks/useCart";
 import type { CheckoutFormData } from "@/components/storefront/checkout/CheckoutForm";
 
@@ -26,20 +27,19 @@ export default function OrderConfirmationPage() {
       const parsed = JSON.parse(savedDetails) as CheckoutFormData;
 
       if (
-        !parsed.fullName ||
-        !parsed.email ||
-        !parsed.phone ||
-        !parsed.line1 ||
-        !parsed.city ||
-        !parsed.postalCode ||
-        !parsed.country
+        !parsed.fullName?.trim() ||
+        !parsed.email?.trim() ||
+        !parsed.phone?.trim() ||
+        !parsed.line1?.trim() ||
+        !parsed.city?.trim() ||
+        !parsed.postalCode?.trim() ||
+        !parsed.country?.trim()
       ) {
         sessionStorage.removeItem("checkoutDetails");
         router.replace("/checkout");
         return;
       }
 
-      // The customer details are read from sessionStorage after navigation.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setCustomer(parsed);
       clearCart();
@@ -53,63 +53,52 @@ export default function OrderConfirmationPage() {
 
   if (isLoading) {
     return (
-      <main className="mx-auto max-w-3xl px-6 py-16 text-center">
-        <p>Loading confirmation...</p>
+      <main className="page-shell">
+        <div className="container narrow-content">
+          <p>Loading confirmation...</p>
+        </div>
       </main>
     );
   }
 
-  if (!customer) {
-    return null;
-  }
+  if (!customer) return null;
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16 text-center">
-      <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-3xl text-green-700">
-        ✓
+    <main className="page-shell">
+      <div className="container narrow-content">
+        <div className="success-panel">
+          <p className="eyebrow">Thank you</p>
+          <h1>Your request is with our team.</h1>
+          <p>
+            We will contact you with availability, delivery timing
+            and the best payment option for your order.
+          </p>
+
+          <section className="mt-6 text-left">
+            <h2 className="font-semibold">Shipping Information</h2>
+            <p className="mt-3">{customer.fullName}</p>
+            <p>{customer.email}</p>
+            <p>{customer.phone}</p>
+            <p>{customer.line1}</p>
+            {customer.line2 && <p>{customer.line2}</p>}
+            <p>
+              {customer.city}
+              {customer.state ? `, ${customer.state}` : ""}
+              {" "}{customer.postalCode}
+            </p>
+            <p>{customer.country}</p>
+          </section>
+
+          <p className="mt-5 text-sm">
+            This is a frontend preview. No quotation request has
+            been submitted to the server yet.
+          </p>
+
+          <Link href="/products" className="btn btn-primary">
+            Browse more equipment
+          </Link>
+        </div>
       </div>
-
-      <h1 className="text-3xl font-semibold">
-        Thank You!
-      </h1>
-
-      <p className="mt-3 text-gray-600">
-        Your checkout details have been received.
-      </p>
-
-      <section className="mt-8 rounded-lg border p-6 text-left">
-        <h2 className="text-lg font-semibold">
-          Shipping Information
-        </h2>
-
-        <p className="mt-3">{customer.fullName}</p>
-        <p>{customer.email}</p>
-        <p>{customer.phone}</p>
-        <p>{customer.line1}</p>
-
-        {customer.line2 && <p>{customer.line2}</p>}
-
-        <p>
-          {customer.city}
-          {customer.state ? `, ${customer.state}` : ""}
-          {" "}
-          {customer.postalCode}
-        </p>
-
-        <p>{customer.country}</p>
-      </section>
-
-      <p className="mt-6 text-sm text-gray-500">
-        This is a frontend confirmation preview. No order has
-        been submitted to the server yet.
-      </p>
-
-      <Link
-        href="/products"
-        className="mt-8 inline-block rounded-md bg-black px-6 py-3 font-medium text-white"
-      >
-        Continue Shopping
-      </Link>
     </main>
   );
 }

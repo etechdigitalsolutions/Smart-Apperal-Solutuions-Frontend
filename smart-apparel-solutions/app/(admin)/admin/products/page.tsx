@@ -1,3 +1,4 @@
-export default function AdminProductsPage() {
-  return <div>Admin Products</div>;
-}
+import Link from "next/link";
+import AdminPanel from "@/components/admin/AdminPanel";
+import { products } from "@/data/products";
+export default function AdminProductsPage() { return <AdminPanel title="Product catalogue" description="Manage machine listings, pricing and availability."><div className="admin-toolbar"><Link href="/admin/products/new" className="btn btn-primary">Add product</Link><Link href="/products" className="btn btn-outline">View storefront</Link></div><div className="page-card admin-table"><div className="admin-table-row admin-table-head"><span>Product</span><span>Brand</span><span>Price</span><span>Action</span></div>{products.map((product) => <div className="admin-table-row" key={product.id}><span>{product.name}</span><span>{product.brand}</span><span>{product.price.toLocaleString("en-LK")}</span><span><Link href={`/admin/products/${product.id}/edit`} className="link-arrow">Edit</Link></span></div>)}</div></AdminPanel>; }

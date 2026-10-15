@@ -1,3 +1,3 @@
-export default function DashboardPage() {
-  return <div>User Dashboard</div>;
-}
+import Link from "next/link";
+import AccountPanel from "@/components/account/AccountPanel";
+export default function DashboardPage() { return <AccountPanel title="Your workshop account" description="Keep track of quotations, orders and saved equipment."><div className="account-card-grid"><Link href="/account/orders" className="page-card"><strong>Recent orders</strong><p>Review delivery progress and past purchases.</p></Link><Link href="/account/wishlist" className="page-card"><strong>Saved equipment</strong><p>Keep machines you are comparing close at hand.</p></Link><Link href="/contact" className="page-card"><strong>Need help?</strong><p>Talk to a specialist about your next upgrade.</p></Link></div></AccountPanel>; }

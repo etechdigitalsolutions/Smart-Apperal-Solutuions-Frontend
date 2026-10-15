@@ -1,3 +1,3 @@
-export default function AdminOrdersPage() {
-  return <div>Admin Orders</div>;
-}
+import Link from "next/link";
+import AdminPanel from "@/components/admin/AdminPanel";
+export default function AdminOrdersPage() { return <AdminPanel title="Quotation orders" description="Follow up on open customer requests and delivery commitments."><div className="page-card admin-table"><div className="admin-table-row admin-table-head"><span>Reference</span><span>Customer</span><span>Total</span><span>Status</span></div>{[["SAS-2026-001", "Nimal Textiles", "රු 482,000", "Checking stock"], ["SAS-2026-002", "Colombo Uniforms", "රු 299,000", "Awaiting reply"], ["SAS-2026-003", "Maya Studio", "රු 118,000", "Ready to dispatch"]].map(([id, customer, total, status]) => <div className="admin-table-row" key={id}><span><Link href={`/admin/orders/${id}`} className="link-arrow">{id}</Link></span><span>{customer}</span><span>{total}</span><span>{status}</span></div>)}</div></AdminPanel>; }

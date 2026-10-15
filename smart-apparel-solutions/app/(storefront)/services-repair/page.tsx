@@ -1,0 +1,5 @@
+import Link from "next/link";
+
+export default function ServicesRepairPage() {
+  return <main className="page-shell"><div className="container"><div className="page-heading"><p className="eyebrow">Keep production moving</p><h1>Service, repair and genuine parts</h1><p>When a machine matters to your output, you need practical support that understands the workshop.</p></div><div className="service-grid">{[["Installation & setup", "Get your machine positioned, assembled and ready for the first production run."], ["Preventive maintenance", "Reduce interruptions with scheduled checks, adjustments and consumable guidance."], ["Repair support", "Share the symptoms and our team will help identify the next sensible step."], ["Genuine spare parts", "Source the right needles, feet, motors and replacement parts for your machine."]].map(([title, copy]) => <article key={title} className="page-card"><span className="service-number">0{title[0] === "I" ? 1 : title[0] === "P" ? 2 : title[0] === "R" ? 3 : 4}</span><h2>{title}</h2><p>{copy}</p></article>)}</div><Link href="/contact" className="btn btn-primary">Request service support</Link></div></main>;
+}

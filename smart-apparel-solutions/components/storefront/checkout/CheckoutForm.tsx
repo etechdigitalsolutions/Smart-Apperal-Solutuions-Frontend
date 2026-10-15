@@ -2,6 +2,8 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useCart } from "@/hooks/useCart";
+import { formatCurrency } from "@/lib/utils/helpers";
 
 export interface CheckoutFormData {
   fullName: string;
@@ -13,6 +15,9 @@ export interface CheckoutFormData {
   state: string;
   postalCode: string;
   country: string;
+  contact: string;
+  payment: string;
+  notes: string;
 }
 
 interface CheckoutFormProps {
@@ -24,6 +29,8 @@ export default function CheckoutForm({
   onSubmit,
   isSubmitting = false,
 }: CheckoutFormProps) {
+  const { items, subtotal } = useCart();
+
   const [formData, setFormData] = useState<CheckoutFormData>({
     fullName: "",
     email: "",
@@ -34,10 +41,15 @@ export default function CheckoutForm({
     state: "",
     postalCode: "",
     country: "Sri Lanka",
+    contact: "WhatsApp",
+    payment: "Quotation first",
+    notes: "",
   });
 
   function handleChange(
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) {
     const { name, value } = event.target;
 
@@ -50,6 +62,8 @@ export default function CheckoutForm({
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    if (items.length === 0 || isSubmitting) return;
+
     onSubmit({
       ...formData,
       fullName: formData.fullName.trim(),
@@ -61,176 +75,177 @@ export default function CheckoutForm({
       state: formData.state.trim(),
       postalCode: formData.postalCode.trim(),
       country: formData.country.trim(),
+      notes: formData.notes.trim(),
     });
   }
 
-  const inputClass =
-    "w-full rounded-md border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-black focus:ring-1 focus:ring-black";
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold">
-          Contact Information
-        </h2>
-
-        <div>
-          <label htmlFor="fullName" className="mb-1 block text-sm">
-            Full Name *
-          </label>
+    <form className="checkout-form" onSubmit={handleSubmit}>
+      <div className="form-grid">
+        <label>
+          Full name
           <input
-            id="fullName"
+            required
             name="fullName"
             autoComplete="name"
+            maxLength={100}
             value={formData.fullName}
             onChange={handleChange}
-            className={inputClass}
-            required
-            maxLength={100}
+            placeholder="Your name"
           />
-        </div>
+        </label>
 
-        <div>
-          <label htmlFor="email" className="mb-1 block text-sm">
-            Email Address *
-          </label>
+        <label>
+          Phone number
           <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            value={formData.email}
-            onChange={handleChange}
-            className={inputClass}
             required
-            maxLength={254}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="phone" className="mb-1 block text-sm">
-            Phone Number *
-          </label>
-          <input
-            id="phone"
             name="phone"
             type="tel"
             autoComplete="tel"
+            maxLength={25}
             value={formData.phone}
             onChange={handleChange}
-            className={inputClass}
-            required
-            maxLength={25}
+            placeholder="07x xxx xxxx"
           />
-        </div>
-      </section>
+        </label>
 
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold">
-          Shipping Address
-        </h2>
-
-        <div>
-          <label htmlFor="line1" className="mb-1 block text-sm">
-            Address Line 1 *
-          </label>
+        <label className="form-span-two">
+          Email address
           <input
-            id="line1"
+            required
+            name="email"
+            type="email"
+            autoComplete="email"
+            maxLength={254}
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="you@example.com"
+          />
+        </label>
+
+        <label className="form-span-two">
+          Address line 1
+          <input
+            required
             name="line1"
             autoComplete="address-line1"
+            maxLength={200}
             value={formData.line1}
             onChange={handleChange}
-            className={inputClass}
-            required
-            maxLength={200}
           />
-        </div>
+        </label>
 
-        <div>
-          <label htmlFor="line2" className="mb-1 block text-sm">
-            Address Line 2
-          </label>
+        <label className="form-span-two">
+          Address line 2
           <input
-            id="line2"
             name="line2"
             autoComplete="address-line2"
+            maxLength={200}
             value={formData.line2}
             onChange={handleChange}
-            className={inputClass}
-            maxLength={200}
           />
-        </div>
+        </label>
 
-        <div>
-          <label htmlFor="city" className="mb-1 block text-sm">
-            City *
-          </label>
+        <label>
+          City
           <input
-            id="city"
+            required
             name="city"
             autoComplete="address-level2"
+            maxLength={100}
             value={formData.city}
             onChange={handleChange}
-            className={inputClass}
-            required
-            maxLength={100}
           />
-        </div>
+        </label>
 
-        <div>
-          <label htmlFor="state" className="mb-1 block text-sm">
-            Province / State
-          </label>
+        <label>
+          Province / State
           <input
-            id="state"
             name="state"
             autoComplete="address-level1"
+            maxLength={100}
             value={formData.state}
             onChange={handleChange}
-            className={inputClass}
-            maxLength={100}
           />
-        </div>
+        </label>
 
-        <div>
-          <label htmlFor="postalCode" className="mb-1 block text-sm">
-            Postal Code *
-          </label>
+        <label>
+          Postal code
           <input
-            id="postalCode"
+            required
             name="postalCode"
             autoComplete="postal-code"
+            maxLength={20}
             value={formData.postalCode}
             onChange={handleChange}
-            className={inputClass}
-            required
-            maxLength={20}
           />
-        </div>
+        </label>
 
-        <div>
-          <label htmlFor="country" className="mb-1 block text-sm">
-            Country *
-          </label>
+        <label>
+          Country
           <input
-            id="country"
+            required
             name="country"
             autoComplete="country-name"
+            maxLength={100}
             value={formData.country}
             onChange={handleChange}
-            className={inputClass}
-            required
-            maxLength={100}
           />
-        </div>
-      </section>
+        </label>
+
+        <label>
+          Preferred contact
+          <select
+            name="contact"
+            value={formData.contact}
+            onChange={handleChange}
+          >
+            <option>WhatsApp</option>
+            <option>Phone call</option>
+            <option>Email</option>
+          </select>
+        </label>
+
+        <label>
+          Payment preference
+          <select
+            name="payment"
+            value={formData.payment}
+            onChange={handleChange}
+          >
+            <option>Quotation first</option>
+            <option>Cash on delivery</option>
+            <option>Koko installments</option>
+            <option>Bank transfer</option>
+          </select>
+        </label>
+
+        <label className="form-span-two">
+          Notes
+          <textarea
+            name="notes"
+            value={formData.notes}
+            onChange={handleChange}
+            placeholder="Product questions or delivery notes"
+          />
+        </label>
+      </div>
+
+      <div className="checkout-total">
+        <span>{items.length} line items</span>
+        <strong>{formatCurrency(subtotal)}</strong>
+      </div>
 
       <button
         type="submit"
-        disabled={isSubmitting}
-        className="w-full rounded-md bg-black px-4 py-3 font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
+        className="btn btn-primary"
+        disabled={!items.length || isSubmitting}
       >
-        {isSubmitting ? "Processing..." : "Continue to Place Order"}
+        {!items.length
+          ? "Your cart is empty"
+          : isSubmitting
+            ? "Processing..."
+            : "Request quotation"}
       </button>
     </form>
   );
