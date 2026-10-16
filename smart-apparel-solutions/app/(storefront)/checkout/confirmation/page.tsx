@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -26,14 +25,17 @@ export default function OrderConfirmationPage() {
 
       const parsed = JSON.parse(savedDetails) as CheckoutFormData;
 
+      const isPickup = parsed.delivery === "pickup";
+
       if (
         !parsed.fullName?.trim() ||
         !parsed.email?.trim() ||
         !parsed.phone?.trim() ||
-        !parsed.line1?.trim() ||
-        !parsed.city?.trim() ||
-        !parsed.postalCode?.trim() ||
-        !parsed.country?.trim()
+        (!isPickup &&
+          (!parsed.line1?.trim() ||
+            !parsed.city?.trim() ||
+            !parsed.postalCode?.trim() ||
+            !parsed.country?.trim()))
       ) {
         sessionStorage.removeItem("checkoutDetails");
         router.replace("/checkout");
@@ -63,10 +65,24 @@ export default function OrderConfirmationPage() {
 
   if (!customer) return null;
 
+  const isPickup = customer.delivery === "pickup";
+
   return (
     <main className="page-shell">
       <div className="container narrow-content">
-        <div className="success-panel">
+        <div className="success-panel co-confirm">
+          <div className="co-confirm-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M5 12.5l4.5 4.5L19 7.5"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+
           <p className="eyebrow">Thank you</p>
           <h1>Your request is with our team.</h1>
           <p>
@@ -74,22 +90,42 @@ export default function OrderConfirmationPage() {
             and the best payment option for your order.
           </p>
 
-          <section className="mt-6 text-left">
-            <h2 className="font-semibold">Shipping Information</h2>
-            <p className="mt-3">{customer.fullName}</p>
-            <p>{customer.email}</p>
-            <p>{customer.phone}</p>
-            <p>{customer.line1}</p>
-            {customer.line2 && <p>{customer.line2}</p>}
-            <p>
-              {customer.city}
-              {customer.state ? `, ${customer.state}` : ""}
-              {" "}{customer.postalCode}
-            </p>
-            <p>{customer.country}</p>
-          </section>
+          <div className="co-confirm-details">
+            <section>
+              <h2>Contact</h2>
+              <p>{customer.fullName}</p>
+              <p>{customer.email}</p>
+              <p>{customer.phone}</p>
+            </section>
 
-          <p className="mt-5 text-sm">
+            <section>
+              <h2>{isPickup ? "Pickup" : "Shipping address"}</h2>
+              {isPickup ? (
+                <p>We will confirm the pickup location, date and time.</p>
+              ) : (
+                <>
+                  <p>{customer.line1}</p>
+                  {customer.line2 && <p>{customer.line2}</p>}
+                  <p>
+                    {customer.city}
+                    {customer.state ? `, ${customer.state}` : ""}{" "}
+                    {customer.postalCode}
+                  </p>
+                  <p>{customer.country}</p>
+                </>
+              )}
+            </section>
+
+            <section className="co-confirm-wide">
+              <h2>Preferences</h2>
+              <p>Delivery: {isPickup ? "Pickup" : "Ship"}</p>
+              <p>Contact via {customer.contact}</p>
+              <p>Payment: {customer.payment}</p>
+              {customer.notes && <p>Notes: {customer.notes}</p>}
+            </section>
+          </div>
+
+          <p className="co-confirm-note">
             This is a frontend preview. No quotation request has
             been submitted to the server yet.
           </p>
