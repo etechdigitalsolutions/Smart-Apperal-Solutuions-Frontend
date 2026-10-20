@@ -29,7 +29,37 @@ export default function ProductDetailPanel({ product }: { product: Product }) {
             <h1>{product.name}</h1>
             <p className="detail-description">{product.description}</p>
             <div className="detail-price"><strong>{formatCurrency(product.price)}</strong>{product.comparePrice ? <span className="strike">{formatCurrency(product.comparePrice)}</span> : null}</div>
-            <p className="product-installment">{formatKokoInstallment(product.price)}</p>
+            
+            <div className="product-installment">
+              <span>{formatKokoInstallment(product.price)}</span>
+
+              <a
+                href={`https://paykoko.com/customer-education?Amount=${(product.price / 3).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="koko-link"
+                aria-label="Learn more about Koko installments"
+              >
+                <Image
+                  src="/images/payments/koko-logo.png"
+                  alt="Koko"
+                  width={38}
+                  height={18}
+                  className="koko-logo"
+                />
+              </a>
+
+              <a
+                href={`https://paykoko.com/customer-education?Amount=${(product.price / 3).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="koko-link"
+                aria-label="Koko payment information"
+              >
+                <span className="koko-info-icon" aria-hidden="true">i</span>
+              </a>
+            </div>
+
             <div className="product-stock"><span className={`stock-dot ${product.stockStatus}`} />{product.stockStatus === "in_stock" ? `${product.stock} ready to dispatch` : product.stockStatus === "pre_order" ? "Available for pre-order" : "Currently unavailable"}</div>
             <div className="quantity-control"><span>Quantity</span><div><button type="button" onClick={() => setQuantity(Math.max(1, quantity - 1))}>−</button><strong>{quantity}</strong><button type="button" onClick={() => setQuantity(Math.min(Math.max(product.stock, 1), quantity + 1))}>+</button></div></div>
             <div className="buy-actions"><button type="button" className="btn btn-primary" disabled={isOutOfStock} onClick={() => addItem({ productId: product.id, product, quantity })}>{isOutOfStock ? "Unavailable" : "Add to quotation cart"}</button><a className="btn btn-secondary" href={`https://wa.me/94712061850?text=${encodeURIComponent(`I need a quotation for ${product.name}`)}`}>Ask on WhatsApp</a></div>

@@ -11,7 +11,7 @@ export function formatKokoInstallment(price: number): string {
     maximumFractionDigits: 2,
   });
 
-  return `or 3 × රු${formatted} with Koko`;
+  return `or 3 × රු${formatted} with `;
 }
 
 export function formatKokoPrice(price: number): string {

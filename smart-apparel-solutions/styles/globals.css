@@ -2565,3 +2565,47 @@ input[type="checkbox"] { width: auto; }
   body { background: #fff; font-size: 12px; }
   .container { max-width: 100%; padding: 0; }
 }
+
+/*--koko installment styles--*/
+
+
+.product-installment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 4px;
+  font-size: 0.83rem;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.koko-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.koko-logo {
+  display: block;
+  width: 38px;
+  height: auto;
+  object-fit: contain;
+}
+
+.koko-info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #222;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
