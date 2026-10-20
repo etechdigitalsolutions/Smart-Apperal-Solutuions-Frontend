@@ -12,7 +12,7 @@ const config = {
   email: "sales@smartapparelsolutions.lk",
   address: "No. 125, Galle Road, Colombo 03, Sri Lanka",
   announcement:
-    "🚚 Island-wide delivery · 3× installments with Koko · Call 071 206 1850",
+    "Island-wide delivery · 3× installments with Koko · Call 071 206 1850",
   features: {
     blog: true,
     wishlist: true,

@@ -1,11 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { ChevronDown, Heart, Menu, Search, ShoppingBag, UserRound, X } from "lucide-react";
 
 import config from "@/config";
 import { navigation } from "@/data/navigation";
+import { products } from "@/data/products";
 import { useCart } from "@/hooks/useCart";
+import { useWishlist } from "@/hooks/useWishlist";
 import { formatCurrency } from "@/lib/utils/helpers";
 
 const secondaryLinks = [
@@ -19,7 +23,38 @@ const secondaryLinks = [
 
 export default function Header() {
   const { itemCount, subtotal } = useCart();
+  const { wishlist } = useWishlist();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [expandedMobile, setExpandedMobile] = useState<string | null>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  const suggestions = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+    if (!normalizedQuery) return [];
+    return products
+      .filter((product) => `${product.name} ${product.brand} ${product.modelCode}`.toLowerCase().includes(normalizedQuery))
+      .slice(0, 4);
+  }, [query]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setSearchOpen(false);
+        setMobileOpen(false);
+      }
+    };
+    const handlePointerDown = (event: PointerEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) setSearchOpen(false);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("pointerdown", handlePointerDown);
+    };
+  }, []);
 
   return (
     <header className="site-header">
@@ -42,37 +77,50 @@ export default function Header() {
             </span>
           </Link>
 
-          <form className="header-search" action="/search" method="get">
-            <input type="search" name="q" placeholder="Search machines, parts and brands" aria-label="Search products" />
-            <select name="category" aria-label="Search category">
-              <option value="all">All</option>
-              <option value="machines">Machines</option>
-              <option value="spare-parts">Spare Parts</option>
-              <option value="needles">Needles</option>
-              <option value="accessories">Accessories</option>
-            </select>
-          </form>
+          <div className="header-search-wrap" ref={searchRef}>
+            <form className="header-search" action="/search" method="get" onSubmit={() => setSearchOpen(false)}>
+              <Search size={17} aria-hidden="true" />
+              <input type="search" name="q" value={query} onFocus={() => setSearchOpen(true)} onChange={(event) => { setQuery(event.target.value); setSearchOpen(true); }} placeholder="Search machines, parts and brands" aria-label="Search products" />
+              <select name="category" aria-label="Search category">
+                <option value="all">All</option>
+                <option value="machines">Machines</option>
+                <option value="spare-parts">Spare Parts</option>
+                <option value="needles">Needles</option>
+                <option value="accessories">Accessories</option>
+              </select>
+            </form>
+            <AnimatePresence>
+              {searchOpen && query.trim() ? (
+                <motion.div className="search-suggestions" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} role="listbox">
+                  {suggestions.length ? suggestions.map((product) => (
+                    <Link key={product.id} href={`/products/${product.slug}`} className="search-suggestion" onClick={() => setSearchOpen(false)}>
+                      <span><strong>{product.name}</strong><small>{product.brand} · {product.modelCode}</small></span>
+                      <b>{formatCurrency(product.price)}</b>
+                    </Link>
+                  )) : <p className="search-empty">No products found. Try a brand or model number.</p>}
+                  <Link href={`/search?q=${encodeURIComponent(query)}`} className="search-view-all" onClick={() => setSearchOpen(false)}>View all results <span>↗</span></Link>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+          </div>
 
           <div className="header-meta">
             <Link href={`tel:${config.phone.replace(/\s+/g, "")}`} className="header-meta-link">
-              <span>☎</span>
+              <span aria-hidden="true">+94</span>
               <strong>{config.phone}</strong>
             </Link>
-            <Link href={config.whatsappUrl} target="_blank" rel="noreferrer" className="header-meta-link">
-              WhatsApp
-            </Link>
-            <Link href="/login" className="header-action">Login</Link>
-            <Link href="/cart" className="header-action">
-              <span>Wishlist</span>
-              <span className="header-badge">{0}</span>
+            <Link href="/login" className="header-action header-icon-action" aria-label="Account"><UserRound size={18} /><span>Account</span></Link>
+            <Link href="/account/wishlist" className="header-action">
+              <Heart size={18} aria-hidden="true" /><span className="header-action-label">Wishlist</span>
+              <span className="header-badge">{wishlist.length}</span>
             </Link>
             <Link href="/cart" className="header-action">
-              <span>Cart</span>
+              <ShoppingBag size={18} aria-hidden="true" /><span className="header-action-label">Cart</span>
               <span className="header-badge">{itemCount}</span>
-              <strong>{formatCurrency(subtotal)}</strong>
+              <strong className="header-cart-total">{formatCurrency(subtotal)}</strong>
             </Link>
-            <button type="button" className="header-action" onClick={() => setMobileOpen((value) => !value)} aria-label="Open menu">
-              Menu
+            <button type="button" className="header-action mobile-menu-trigger" onClick={() => setMobileOpen((value) => !value)} aria-expanded={mobileOpen} aria-label={mobileOpen ? "Close menu" : "Open menu"}>
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}<span>Menu</span>
             </button>
           </div>
         </div>
@@ -110,22 +158,18 @@ export default function Header() {
         </div>
       </div>
 
+      <AnimatePresence>
       {mobileOpen ? (
-        <div className="mobile-menu">
+        <motion.div className="mobile-menu" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.2 }}>
           {navigation.map((item) => (
             <div key={item.slug} className="mobile-menu-group">
-              <Link href={`/products?category=${item.slug}`} onClick={() => setMobileOpen(false)}>
-                {item.label}
-              </Link>
-              {item.children?.slice(0, 4).map((child) => (
-                <Link key={child.slug} href={`/products?tag=${child.slug}`} onClick={() => setMobileOpen(false)} className="mobile-menu-subitem">
-                  {child.label}
-                </Link>
-              ))}
+              <div className="mobile-menu-heading"><Link href={`/products?category=${item.slug}`} onClick={() => setMobileOpen(false)}>{item.label}</Link>{item.children?.length ? <button type="button" aria-label={`Expand ${item.label}`} aria-expanded={expandedMobile === item.slug} onClick={() => setExpandedMobile((value) => value === item.slug ? null : item.slug)}><ChevronDown size={17} /></button> : null}</div>
+              <AnimatePresence>{expandedMobile === item.slug ? <motion.div className="mobile-menu-children" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>{item.children?.map((child) => <Link key={child.slug} href={`/products?tag=${child.slug}`} onClick={() => setMobileOpen(false)} className="mobile-menu-subitem">{child.label}</Link>)}</motion.div> : null}</AnimatePresence>
             </div>
           ))}
-        </div>
+        </motion.div>
       ) : null}
+      </AnimatePresence>
     </header>
   );
 }

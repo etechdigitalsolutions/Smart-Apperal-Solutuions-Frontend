@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { Minus, Plus, Trash2 } from "lucide-react";
 
 import { useCart } from "@/hooks/useCart";
 import { formatCurrency } from "@/lib/utils/helpers";
@@ -73,9 +74,7 @@ export default function CartItem({ item }: CartItemProps) {
               disabled={atMin}
               aria-label={`Decrease quantity of ${product.name}`}
             >
-              <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-                <path d="M3 8h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-              </svg>
+              <Minus size={16} aria-hidden="true" />
             </button>
 
             <span aria-live="polite">{item.quantity}</span>
@@ -86,9 +85,7 @@ export default function CartItem({ item }: CartItemProps) {
               disabled={atMax}
               aria-label={`Increase quantity of ${product.name}`}
             >
-              <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-                <path d="M3 8h10M8 3v10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-              </svg>
+              <Plus size={16} aria-hidden="true" />
             </button>
           </div>
 
@@ -98,15 +95,7 @@ export default function CartItem({ item }: CartItemProps) {
             onClick={() => removeItem(item.productId, item.size, item.color)}
             aria-label={`Remove ${product.name} from cart`}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path
-                d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <Trash2 size={19} aria-hidden="true" />
           </button>
         </div>
       </div>

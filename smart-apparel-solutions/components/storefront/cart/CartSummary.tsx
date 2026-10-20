@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { ChevronDown, ShoppingBag } from "lucide-react";
 
 import { useCart } from "@/hooks/useCart";
 import { formatCurrency } from "@/lib/utils/helpers";
@@ -24,16 +25,7 @@ export default function CartSummary() {
           onClick={() => setNoteOpen((open) => !open)}
         >
           <span>Add order note</span>
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-            className={noteOpen ? "chevron open" : "chevron"}
-          >
-            <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <ChevronDown size={18} aria-hidden="true" className={noteOpen ? "chevron open" : "chevron"} />
         </button>
 
         {noteOpen && (
@@ -58,15 +50,7 @@ export default function CartSummary() {
       </div>
 
       <Link href="/checkout" className="btn btn-primary cart-checkout-btn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path
-            d="M3 9h18l-2 10a2 2 0 0 1-2 1.6H7A2 2 0 0 1 5 19L3 9zM8 9l3-5M16 9l-3-5"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <ShoppingBag size={20} aria-hidden="true" />
         Checkout
       </Link>
     </aside>
