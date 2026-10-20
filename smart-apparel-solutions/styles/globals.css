@@ -2492,6 +2492,21 @@ input[type="checkbox"] { width: auto; }
   height: auto;
 }
 
+.co-submit {
+  background: var(--color-accent);
+  color: #fff;
+  border-radius: var(--btn-radius);
+}
+
+.co-submit:hover:not(:disabled) {
+  background: var(--color-accent-dark);
+}
+
+.co-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 @media (max-width: 560px) {
   .co-pay-aside {
     display: none;
