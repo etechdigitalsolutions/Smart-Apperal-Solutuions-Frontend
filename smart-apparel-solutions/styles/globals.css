@@ -2189,6 +2189,315 @@ input[type="checkbox"] { width: auto; }
   border-radius: 12px;
 }
 
+/* ============================================================
+   CHECKOUT v2 — matches the new design (dark outlined fields,
+   radio payment list, etc.)
+
+/* ---------- Heading row with "Log in" link ---------- */
+.co-heading-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.co-heading-row .co-heading {
+  margin-top: 0;
+}
+
+.co-login {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.co-login:hover {
+  color: var(--color-accent);
+}
+
+.co-heading {
+  font-size: 1.15rem;
+}
+
+/* ---------- Outlined fields (dark 1px border, small radius) ---------- */
+.co-field input,
+.co-field select,
+.co-field textarea {
+  border: 1px solid var(--color-navy);
+  border-radius: 4px;
+}
+
+.co-field input:focus,
+.co-field select:focus,
+.co-field textarea:focus {
+  border-color: var(--color-navy);
+  box-shadow: 0 0 0 1px var(--color-navy);
+}
+
+.co-field select {
+  font-size: 0.9rem;
+}
+
+/* ---------- Hints, checkboxes, link buttons ---------- */
+.co-hint {
+  margin-top: 0.45rem;
+  font-size: 0.75rem;
+}
+
+.co-check {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.9rem 0 0;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.co-check input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  padding: 0;
+  flex-shrink: 0;
+  border-radius: 3px;
+  accent-color: var(--color-navy);
+}
+
+.co-link-btn {
+  justify-self: start;
+  padding: 0;
+  font-size: 0.78rem;
+  color: var(--color-text-secondary);
+  text-align: left;
+}
+
+.co-link-btn:hover {
+  color: var(--color-accent);
+}
+
+/* ---------- Ship / Store Pickup toggle ---------- */
+.co-toggle {
+  padding: 0;
+  gap: 0;
+  border: 0;
+  border-radius: 4px;
+  background: var(--color-surface-2);
+}
+
+.co-toggle-btn {
+  padding: 0.9rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.co-toggle-btn.is-active {
+  border-color: var(--color-navy);
+  box-shadow: none;
+}
+
+/* ---------- Pickup location card ---------- */
+.co-pickup-loc {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  margin: 0;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.co-pickup-loc.is-selected {
+  border-color: var(--color-navy);
+  box-shadow: inset 0 0 0 1px var(--color-navy);
+}
+
+.co-pickup-loc input[type="radio"],
+.co-pay-item input[type="radio"] {
+  width: 1.05rem;
+  height: 1.05rem;
+  padding: 0;
+  margin-top: 0.1rem;
+  flex-shrink: 0;
+  accent-color: var(--color-navy);
+}
+
+.co-pickup-loc-body {
+  display: grid;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+  font-size: 0.8rem;
+  color: var(--color-text);
+}
+
+.co-pickup-loc-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.co-free {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.co-pickup-loc-addr {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+/* ---------- Shipping options placeholder ---------- */
+.co-box {
+  padding: 1.75rem 1rem;
+  background: var(--color-surface-2);
+  border-radius: 4px;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--color-text-secondary);
+}
+
+/* ---------- Payment list ---------- */
+.co-pay-list {
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.co-pay-item {
+  position: relative;
+  display: block;
+  margin: 0;
+  padding: 1rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.co-pay-item + .co-pay-item {
+  border-top: 1px solid var(--color-border);
+}
+
+.co-pay-item.is-selected {
+  z-index: 1;
+  box-shadow: inset 0 0 0 1px var(--color-navy);
+  background: var(--color-surface);
+}
+
+.co-pay-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+
+.co-pay-row > input[type="radio"] {
+  margin-top: 0;
+}
+
+.co-pay-aside {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.co-pay-brands {
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+.co-pay-detail {
+  display: block;
+  margin: 1.1rem 0 0 1.85rem;
+  font-size: 0.72rem;
+  color: var(--color-text-secondary);
+}
+
+.co-pay-koko {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--color-text-secondary);
+}
+
+.co-koko-logo {
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  color: #5b3df5;
+}
+
+/* ---------- Note + terms ---------- */
+.co-note {
+  margin-top: 0.8rem;
+}
+
+.co-terms {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.75rem;
+}
+
+.co-terms a {
+  color: var(--color-heading);
+  font-weight: 600;
+}
+
+.co-terms a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Actions: dark Place Order button ---------- */
+.co-actions {
+  margin-top: 1.5rem;
+}
+
+.co-return {
+  color: var(--color-text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.co-return:hover {
+  color: var(--color-heading);
+}
+
+.co-submit {
+  min-width: 10rem;
+  padding-block: 1rem;
+  border-radius: 4px;
+  background: var(--color-navy);
+  font-size: 0.8rem;
+}
+
+.co-submit:hover:not(:disabled) {
+  background: var(--color-navy-dark);
+}
+
+.co-pay-brands {
+  display: block;
+}
+
+.co-pay-logo {
+  display: block;
+  margin-top: 0.5rem;
+  height: auto;
+}
+
+@media (max-width: 560px) {
+  .co-pay-aside {
+    display: none;
+  }
+}
+
 /* ---------- Desktop: summary is FIXED, only the form scrolls ----------
    The summary's top edge is set by the checkout page (see page.tsx): it
    starts right under the header block and then follows the sticky header
