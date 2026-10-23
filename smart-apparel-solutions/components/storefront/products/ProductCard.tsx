@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
-import { Heart, Plus } from "lucide-react";
+import { Heart, Plus, Tag } from "lucide-react";
 
 import { useCart } from "@/hooks/useCart";
 import { useWishlist } from "@/hooks/useWishlist";
@@ -16,6 +16,14 @@ export default function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart();
   const { wishlist, toggle } = useWishlist();
   const isWishlisted = wishlist.includes(product.id);
+  const savings =
+  product.comparePrice && product.comparePrice > product.price
+    ? product.comparePrice - product.price
+    : 0;
+
+  const kokoUrl = `https://paykoko.com/customer-education?Amount=${(product.price / 3).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+  const labelBadges = product.badges.filter((b) => !b.includes("%") && b !== "Out of Stock");
 
   return (
     <article className="product-card">
@@ -39,11 +47,15 @@ export default function ProductCard({ product }: { product: Product }) {
         </Link>
 
         <div className="product-badges">
-          {product.badges.map((badge) => (
-            <span key={badge} className={badge.includes("%") ? "badge badge-sale" : badge === "Out of Stock" ? "badge badge-soldout" : "badge badge-new"}>
-              {badge}
+          {savings > 0 && (
+            <span className="badge-off">
+              <Tag size={14} /> {formatCurrency(savings)} off
             </span>
+          )}
+          {labelBadges.map((badge) => (
+            <span key={badge} className="badge badge-new">{badge}</span>
           ))}
+          {isOutOfStock && <span className="badge badge-soldout">Out of Stock</span>}
         </div>
 
         <motion.button type="button" whileTap={{ scale: 0.88 }} className={`product-favorite ${isWishlisted ? "is-wishlisted" : ""}`} aria-label={`${isWishlisted ? "Remove" : "Save"} ${product.name}`} onClick={() => toggle(product.id)}>
@@ -61,8 +73,8 @@ export default function ProductCard({ product }: { product: Product }) {
         <h3>{product.name}</h3>
 
         <div className="product-pricing">
-          {product.comparePrice ? <span className="strike">{formatCurrency(product.comparePrice)}</span> : null}
           <strong>{formatCurrency(product.price)}</strong>
+          {product.comparePrice ? <span className="strike">{formatCurrency(product.comparePrice)}</span> : null}
         </div>
 
         
@@ -97,8 +109,8 @@ export default function ProductCard({ product }: { product: Product }) {
           </div>
 
 
-        <div className="product-stock">
-          <span className={`stock-dot ${product.stockStatus}`} aria-hidden="true" />
+        <div className={`product-stock is-${product.stockStatus}`}>
+          <span className="stock-dot" aria-hidden="true" />
           {product.stockStatus === "in_stock" ? "In stock" : product.stockStatus === "pre_order" ? "Pre-order" : "Out of stock"}
         </div>
 
