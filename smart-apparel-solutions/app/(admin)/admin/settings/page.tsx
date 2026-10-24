@@ -1,3 +1,2 @@
-export default function AdminSettingsPage() {
-  return <div>Admin Settings</div>;
-}
+import AdminPanel from "@/components/admin/AdminPanel";
+export default function AdminSettingsPage() { return <AdminPanel title="Store settings" description="Control the details customers see across the storefront."><form className="page-card form-grid admin-form"><label>Store name<input defaultValue="Smart Apparel Solutions" /></label><label>Sales phone<input defaultValue="+94 71 206 1850" /></label><label className="form-span-two">Announcement<input defaultValue="Island-wide delivery and Koko installments available" /></label><button type="button" className="btn btn-primary">Save settings</button></form></AdminPanel>; }
