@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ChevronDown, Heart, Menu, Search, ShoppingBag, UserRound, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 import config from "@/config";
 import { navigation } from "@/data/navigation";
@@ -28,7 +29,12 @@ export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [expandedMobile, setExpandedMobile] = useState<string | null>(null);
+  const [openNav, setOpenNav] = useState<string | null>(null);
+  const [isHidden, setIsHidden] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const navigationRef = useRef<HTMLElement>(null);
+  const pathname = usePathname();
+  const reducedMotion = useReducedMotion();
 
   const suggestions = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -43,10 +49,12 @@ export default function Header() {
       if (event.key === "Escape") {
         setSearchOpen(false);
         setMobileOpen(false);
+        setOpenNav(null);
       }
     };
     const handlePointerDown = (event: PointerEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) setSearchOpen(false);
+      if (navigationRef.current && !navigationRef.current.contains(event.target as Node)) setOpenNav(null);
     };
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("pointerdown", handlePointerDown);
@@ -56,8 +64,43 @@ export default function Header() {
     };
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    let frameId: number | null = null;
+
+    const updateVisibility = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY <= 8 || currentScrollY < lastScrollY - 8) {
+        setIsHidden(false);
+      } else if (currentScrollY > lastScrollY + 12 && !mobileOpen && !searchOpen) {
+        setIsHidden(true);
+      }
+
+      lastScrollY = currentScrollY;
+      frameId = null;
+    };
+
+    const handleScroll = () => {
+      if (frameId === null) frameId = window.requestAnimationFrame(updateVisibility);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (frameId !== null) window.cancelAnimationFrame(frameId);
+    };
+  }, [mobileOpen, searchOpen]);
+
   return (
-    <header className="site-header">
+    <header className={`site-header${isHidden ? " is-hidden" : ""}`}>
       <div className="announcement-bar">
         <div className="container announcement-inner">
           <span>{config.announcement}</span>
@@ -119,30 +162,45 @@ export default function Header() {
               <span className="header-badge">{itemCount}</span>
               <strong className="header-cart-total">{formatCurrency(subtotal)}</strong>
             </Link>
-            <button type="button" className="header-action mobile-menu-trigger" onClick={() => setMobileOpen((value) => !value)} aria-expanded={mobileOpen} aria-label={mobileOpen ? "Close menu" : "Open menu"}>
+            <button type="button" className="header-action mobile-menu-trigger" onClick={() => { setIsHidden(false); setMobileOpen((value) => !value); }} aria-expanded={mobileOpen} aria-label={mobileOpen ? "Close menu" : "Open menu"}>
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}<span>Menu</span>
             </button>
           </div>
         </div>
       </div>
 
-      <nav className="mega-nav" aria-label="Main navigation">
+      <nav className="mega-nav" aria-label="Main navigation" ref={navigationRef}>
         <div className="container mega-nav-inner">
           {navigation.map((item) => (
-            <div key={item.slug} className="nav-item">
-              <Link href={`/products?category=${item.slug}`}>{item.label}</Link>
+            <div key={item.slug} className={`nav-item${openNav === item.slug ? " is-open" : ""}`}>
+              <div className="nav-item-link">
+                <Link href={`/products?category=${item.slug}`} className={pathname.includes(item.slug) ? "is-active" : ""}>{item.label}</Link>
+                {item.children?.length ? (
+                  <button
+                    type="button"
+                    className="nav-item-toggle"
+                    aria-label={`${openNav === item.slug ? "Close" : "Open"} ${item.label} menu`}
+                    aria-expanded={openNav === item.slug}
+                    onClick={() => setOpenNav((value) => value === item.slug ? null : item.slug)}
+                  >
+                    <ChevronDown size={14} aria-hidden="true" />
+                  </button>
+                ) : null}
+              </div>
               {item.children && item.children.length > 0 ? (
                 <div className="mega-panel" aria-label={`${item.label} menu`}>
-                  {item.children.slice(0, 4).map((child) => (
-                    <div key={child.slug} className="mega-column">
-                      <h4>{child.label}</h4>
-                      {item.children && item.children.slice(0, 4).map((nested) => (
-                        <Link key={nested.slug} href={`/products?tag=${nested.slug}`}>
-                          {nested.label}
-                        </Link>
-                      ))}
-                    </div>
-                  ))}
+                  <div className="mega-panel-intro">
+                    <span className="mega-panel-kicker">Explore</span>
+                    <strong>{item.label}</strong>
+                    <Link href={`/products?category=${item.slug}`}>View all <span aria-hidden="true">↗</span></Link>
+                  </div>
+                  <div className="mega-panel-links">
+                    {item.children.map((child) => (
+                      <Link key={child.slug} href={`/products?tag=${child.slug}`} className={pathname.includes(child.slug) ? "is-active" : ""}>
+                        <span>{child.label}</span><span aria-hidden="true">↗</span>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               ) : null}
             </div>
@@ -160,14 +218,25 @@ export default function Header() {
 
       <AnimatePresence>
       {mobileOpen ? (
-        <motion.div className="mobile-menu" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.2 }}>
+        <>
+          <motion.button className="mobile-menu-backdrop" type="button" aria-label="Close navigation menu" onClick={() => setMobileOpen(false)} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
+          <motion.div className="mobile-menu" initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }} transition={{ duration: reducedMotion ? 0 : 0.24, ease: "easeOut" }}>
+          <div className="mobile-menu-header">
+            <span>Menu</span>
+            <button type="button" onClick={() => setMobileOpen(false)} aria-label="Close navigation menu"><X size={20} /></button>
+          </div>
           {navigation.map((item) => (
             <div key={item.slug} className="mobile-menu-group">
               <div className="mobile-menu-heading"><Link href={`/products?category=${item.slug}`} onClick={() => setMobileOpen(false)}>{item.label}</Link>{item.children?.length ? <button type="button" aria-label={`Expand ${item.label}`} aria-expanded={expandedMobile === item.slug} onClick={() => setExpandedMobile((value) => value === item.slug ? null : item.slug)}><ChevronDown size={17} /></button> : null}</div>
               <AnimatePresence>{expandedMobile === item.slug ? <motion.div className="mobile-menu-children" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>{item.children?.map((child) => <Link key={child.slug} href={`/products?tag=${child.slug}`} onClick={() => setMobileOpen(false)} className="mobile-menu-subitem">{child.label}</Link>)}</motion.div> : null}</AnimatePresence>
             </div>
           ))}
-        </motion.div>
+          <div className="mobile-menu-secondary">
+            <Link href="/login" onClick={() => setMobileOpen(false)}>Account</Link>
+            {secondaryLinks.map((link) => <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}>{link.label}</Link>)}
+          </div>
+          </motion.div>
+        </>
       ) : null}
       </AnimatePresence>
     </header>
