@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ChevronDown, Heart, Menu, Search, ShoppingBag, UserRound, X } from "lucide-react";
@@ -113,11 +114,7 @@ export default function Header() {
       <div className="header-main">
         <div className="container header-inner">
           <Link href="/" className="brand-mark" aria-label="Smart Apparel Solutions home">
-            <span className="brand-mark-badge">S</span>
-            <span className="brand-copy">
-              <span>Smart Apparel</span>
-              <small>Solutions</small>
-            </span>
+            <Image src="/images/logo/smart-apperal-logo.png" alt="Smart Apparel Solutions" width={142} height={68} priority />
           </Link>
 
           <div className="header-search-wrap" ref={searchRef}>

@@ -4,20 +4,20 @@
   --font-body: "Inter", "Noto Sans Sinhala", sans-serif;
   --font-heading: "Inter", "Noto Sans Sinhala", sans-serif;
 
-  --color-bg: #f4f1eb;
+  --color-bg: #f7faff;
   --color-surface: #ffffff;
-  --color-surface-2: #ebe8e1;
-  --color-surface-3: #e2ded5;
-  --color-text: #242622;
-  --color-text-secondary: #696b63;
-  --color-heading: #1c201d;
-  --color-border: #dcd8cf;
-  --color-border-strong: #b9b5aa;
-  --color-navy: #202923;
-  --color-navy-dark: #151b18;
-  --color-accent: #d4513e;
-  --color-accent-dark: #ae392d;
-  --color-accent-soft: #f7e1da;
+  --color-surface-2: #eff6ff;
+  --color-surface-3: #dbeafe;
+  --color-text: #172b4d;
+  --color-text-secondary: #64748b;
+  --color-heading: #0b1f3a;
+  --color-border: #dbeafe;
+  --color-border-strong: #bfdbfe;
+  --color-navy: #0b1f3a;
+  --color-navy-dark: #06152b;
+  --color-accent: #155eef;
+  --color-accent-dark: #1248bd;
+  --color-accent-soft: #dbeafe;
   --color-success: #0a8f5c;
   --color-success-soft: #e9f9f2;
   --color-warning: #c57a08;
@@ -45,14 +45,14 @@
   --space-16: 4rem;
   --space-20: 5rem;
 
-  --shadow-sm: 0 1px 2px rgba(28, 32, 29, 0.06);
-  --shadow-md: 0 16px 35px rgba(28, 32, 29, 0.12);
-  --shadow-lg: 0 24px 55px rgba(28, 32, 29, 0.16);
+  --shadow-sm: 0 1px 3px rgba(11, 31, 58, 0.08);
+  --shadow-md: 0 16px 35px rgba(11, 31, 58, 0.12);
+  --shadow-lg: 0 24px 55px rgba(11, 31, 58, 0.16);
 
   --container-width: 1320px;
   --gutter: clamp(1rem, 2vw, 1.5rem);
   --section-gap: clamp(4.5rem, 8vw, 7.5rem);
-  --card-radius: 4px;
-  --btn-radius: 2px;
+  --card-radius: 12px;
+  --btn-radius: 8px;
   --transition: 220ms ease;
 }
