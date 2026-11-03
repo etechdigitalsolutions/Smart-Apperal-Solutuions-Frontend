@@ -101,7 +101,7 @@ export default function Header() {
   }, [mobileOpen, searchOpen]);
 
   return (
-    <header className={`site-header${isHidden ? " is-hidden" : ""}`}>
+    <header id="top" className={`site-header${isHidden ? " is-hidden" : ""}`}>
       <div className="announcement-bar">
         <div className="container announcement-inner">
           <span>{config.announcement}</span>
