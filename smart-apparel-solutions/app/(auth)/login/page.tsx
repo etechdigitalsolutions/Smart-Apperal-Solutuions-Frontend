@@ -1,3 +1,2 @@
-export default function LoginPage() {
-  return <div>Login Page</div>;
-}
+import AuthPanel from "@/components/auth/AuthPanel";
+export default function LoginPage() { return <AuthPanel mode="login" />; }

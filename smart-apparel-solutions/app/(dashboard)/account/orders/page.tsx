@@ -1,3 +1,3 @@
-export default function OrdersPage() {
-  return <div>Orders Page</div>;
-}
+import Link from "next/link";
+import AccountPanel from "@/components/account/AccountPanel";
+export default function OrdersPage() { return <AccountPanel title="Your orders" description="Track quotations and equipment deliveries." ><div className="page-card order-list"><div><strong>SAS-2026-001</strong><span>Quotation in progress</span><Link href="/account/orders/SAS-2026-001" className="link-arrow">View details</Link></div><div><strong>No completed orders yet</strong><span>Your next machine upgrade will appear here.</span><Link href="/products" className="link-arrow">Browse equipment</Link></div></div></AccountPanel>; }

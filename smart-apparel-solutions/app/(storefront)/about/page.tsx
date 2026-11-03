@@ -1,3 +1,6 @@
+import Link from "next/link";
+import config from "@/config";
+
 export default function AboutPage() {
-  return <div>About Page</div>;
+  return <main className="page-shell"><div className="container"><div className="page-heading"><p className="eyebrow">About Smart Apparel Solutions</p><h1>Practical machinery support for Sri Lankan workshops</h1><p>We help garment makers, repair businesses and growing production teams find dependable equipment without making the buying process complicated.</p></div><div className="about-grid"><div className="page-card"><span className="service-number">01</span><h2>We understand the workflow</h2><p>Our recommendations start with the material, operation and output you need, not a generic product list.</p></div><div className="page-card"><span className="service-number">02</span><h2>We stay close after delivery</h2><p>From setup to genuine parts and repair guidance, our team is here when production needs attention.</p></div><div className="page-card"><span className="service-number">03</span><h2>We make local buying easier</h2><p>Island-wide delivery, Koko installment options and direct WhatsApp support keep your next upgrade moving.</p></div></div><div className="page-card about-contact"><p className="eyebrow">Visit or call</p><h2>{config.address}</h2><p>{config.phone} · {config.email}</p><Link href="/contact" className="btn btn-primary">Talk to our team</Link></div></div></main>;
 }

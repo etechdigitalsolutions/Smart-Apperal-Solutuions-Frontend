@@ -1,3 +1,2 @@
-export default function UserSettingsPage() {
-  return <div>User Settings Page</div>;
-}
+import AccountPanel from "@/components/account/AccountPanel";
+export default function UserSettingsPage() { return <AccountPanel title="Account settings" description="Choose how we keep you informed."><div className="page-card settings-list"><label><input type="checkbox" defaultChecked /> Send quotation updates by WhatsApp</label><label><input type="checkbox" defaultChecked /> Send maintenance and product news</label><button className="btn btn-primary" type="button">Save settings</button></div></AccountPanel>; }

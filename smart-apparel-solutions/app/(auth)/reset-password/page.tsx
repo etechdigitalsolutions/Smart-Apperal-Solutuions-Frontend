@@ -1,3 +1,2 @@
-export default function ResetPasswordPage() {
-  return <div>Reset Password Page</div>;
-}
+import AuthPanel from "@/components/auth/AuthPanel";
+export default function ResetPasswordPage() { return <AuthPanel mode="reset" />; }

@@ -1,3 +1,2 @@
-export default function ProfilePage() {
-  return <div>Profile Page</div>;
-}
+import AccountPanel from "@/components/account/AccountPanel";
+export default function ProfilePage() { return <AccountPanel title="Your profile" description="Keep your contact details up to date."><form className="page-card form-grid account-form-card"><label>Full name<input placeholder="Your name" /></label><label>Phone<input placeholder="07x xxx xxxx" /></label><label className="form-span-two">Email<input type="email" placeholder="you@example.com" /></label><button className="btn btn-primary" type="button">Save profile</button></form></AccountPanel>; }

@@ -1,3 +1,6 @@
+import Link from "next/link";
+import config from "@/config";
+
 export default function ContactPage() {
-  return <div>Contact Page</div>;
+  return <main className="page-shell"><div className="container"><div className="page-heading"><p className="eyebrow">Talk to a machine specialist</p><h1>Let us help you build the right setup</h1><p>Tell us what you make and we will help you choose equipment, accessories and after-sales support.</p></div><div className="contact-layout"><form className="page-card contact-form"><div className="form-grid"><label>Name<input required placeholder="Your name" /></label><label>Phone<input required placeholder="07x xxx xxxx" /></label><label className="form-span-two">Email<input type="email" required placeholder="you@example.com" /></label><label className="form-span-two">How can we help?<textarea required placeholder="Machine, spare part, service or quotation question" /></label></div><button className="btn btn-primary" type="submit">Send enquiry</button></form><aside className="page-card contact-aside"><p className="eyebrow">Direct contact</p><h2>Smart Apparel Solutions</h2><p>{config.address}</p><p><strong>{config.phone}</strong></p><p>{config.email}</p><Link href="/services-repair" className="link-arrow">View service support</Link><a href={config.whatsappUrl} className="btn btn-secondary">Message on WhatsApp</a></aside></div></div></main>;
 }

@@ -1,3 +1,2 @@
-export default function AddressesPage() {
-  return <div>Addresses Page</div>;
-}
+import AccountPanel from "@/components/account/AccountPanel";
+export default function AddressesPage() { return <AccountPanel title="Delivery addresses" description="Manage the places where your equipment and parts should arrive."><div className="page-card account-form-card"><h2>Primary workshop</h2><p>No saved address yet.</p><button className="btn btn-primary" type="button">Add an address</button></div></AccountPanel>; }

@@ -19,15 +19,35 @@ export interface Product {
   images: string[];
   category: string;
   tags: string[];
+  brand: string;
+  modelCode: string;
+  badges: string[];
+  specs: Record<string, string>;
+  stockStatus: "in_stock" | "out_of_stock" | "pre_order";
   stock: number;
   sku: string;
   createdAt: string;
+  installment?: {
+    months: number;
+    perMonth: number;
+    provider: "Koko";
+  };
+}
+
+export interface Brand {
+  id: string;
+  name: string;
+  slug: string;
+  logo?: string;
+  description?: string;
 }
 
 export interface Category {
   id: string;
   name: string;
   slug: string;
+  parentSlug?: string;
+  children?: Category[];
   image?: string;
   description?: string;
 }

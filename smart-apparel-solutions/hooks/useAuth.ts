@@ -1,11 +1,19 @@
 // Custom hook for auth state
 import { useState } from "react";
 
+import type { User } from "@/types";
+
+type LoginCredentials = {
+  email: string;
+  password: string;
+};
+
 export function useAuth() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const login = async (credentials: { email: string; password: string }) => {
+  const login = async (credentials: LoginCredentials) => {
+    void credentials;
     setIsLoading(true);
     // TODO: implement login
     setIsLoading(false);

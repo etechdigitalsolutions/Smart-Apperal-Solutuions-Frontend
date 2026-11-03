@@ -1,3 +1,2 @@
-export default function ForgotPasswordPage() {
-  return <div>Forgot Password Page</div>;
-}
+import AuthPanel from "@/components/auth/AuthPanel";
+export default function ForgotPasswordPage() { return <AuthPanel mode="forgot" />; }

@@ -1,3 +1,2 @@
-export default function AnalyticsPage() {
-  return <div>Analytics Page</div>;
-}
+import AdminPanel from "@/components/admin/AdminPanel";
+export default function AnalyticsPage() { return <AdminPanel title="Analytics" description="Understand what customers are comparing and where support is needed."><div className="admin-stat-grid"><div className="page-card"><strong>1,842</strong><span>Catalogue visits</span></div><div className="page-card"><strong>18.4%</strong><span>Quotation conversion</span></div><div className="page-card"><strong>342</strong><span>Searches this week</span></div><div className="page-card"><strong>64%</strong><span>Mobile sessions</span></div></div><div className="page-card chart-placeholder"><h2>Demand by category</h2><div className="bar-chart"><span className="bar-85" /><span className="bar-62" /><span className="bar-46" /><span className="bar-72" /><span className="bar-34" /></div><p>Sewing machines lead demand, followed by finishing and spare parts.</p></div></AdminPanel>; }

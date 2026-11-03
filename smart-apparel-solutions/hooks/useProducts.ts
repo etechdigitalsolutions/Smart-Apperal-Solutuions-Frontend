@@ -1,14 +1,16 @@
 // Custom hook for products
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
+import type { Product } from "@/types";
 
 export function useProducts(filters?: Record<string, string>) {
-  const [products, setProducts] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [products] = useState<Product[]>([]);
+  const [isLoading] = useState(false);
+  const [error] = useState<string | null>(null);
 
   useEffect(() => {
-    // TODO: fetch products
-  }, []);
+    void filters;
+  }, [filters]);
 
   return { products, isLoading, error };
 }
