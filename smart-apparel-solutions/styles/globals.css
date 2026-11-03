@@ -1267,6 +1267,20 @@ p { color: var(--color-text-secondary); }
   gap: 0.3rem;
 }
 
+.whatsapp-action,
+.whatsapp-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.whatsapp-action img,
+.whatsapp-text-link img {
+  width: 1.1rem;
+  height: 1.1rem;
+  object-fit: contain;
+}
+
 .social-links a:hover {
   color: var(--color-accent);
 }
@@ -3653,6 +3667,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--color-accent); o
 .application-card,
 .collection-card {
   border-radius: 12px;
+}
+
+.service-request-btn {
+  margin-top: 2rem;
 }
 
 @media (max-width: 980px) {

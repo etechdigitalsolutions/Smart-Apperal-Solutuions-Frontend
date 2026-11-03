@@ -62,7 +62,7 @@ export default function ProductDetailPanel({ product }: { product: Product }) {
 
             <div className="product-stock"><span className={`stock-dot ${product.stockStatus}`} />{product.stockStatus === "in_stock" ? `${product.stock} ready to dispatch` : product.stockStatus === "pre_order" ? "Available for pre-order" : "Currently unavailable"}</div>
             <div className="quantity-control"><span>Quantity</span><div><button type="button" onClick={() => setQuantity(Math.max(1, quantity - 1))}>−</button><strong>{quantity}</strong><button type="button" onClick={() => setQuantity(Math.min(Math.max(product.stock, 1), quantity + 1))}>+</button></div></div>
-            <div className="buy-actions"><button type="button" className="btn btn-primary" disabled={isOutOfStock} onClick={() => addItem({ productId: product.id, product, quantity })}>{isOutOfStock ? "Unavailable" : "Add to quotation cart"}</button><a className="btn btn-secondary" href={`https://wa.me/94712061850?text=${encodeURIComponent(`I need a quotation for ${product.name}`)}`}>Ask on WhatsApp</a></div>
+            <div className="buy-actions"><button type="button" className="btn btn-primary" disabled={isOutOfStock} onClick={() => addItem({ productId: product.id, product, quantity })}>{isOutOfStock ? "Unavailable" : "Add to quotation cart"}</button><a className="btn btn-secondary whatsapp-action" href={`https://wa.me/94712061850?text=${encodeURIComponent(`I need a quotation for ${product.name}`)}`}><Image src="/images/social/whatsapp.png" alt="" width={18} height={18} /> Ask on WhatsApp</a></div>
             <div className="detail-trust"><span>✓ Island-wide delivery</span><span>✓ Genuine parts support</span><span>✓ Technician guidance</span></div>
           </aside>
         </div>
