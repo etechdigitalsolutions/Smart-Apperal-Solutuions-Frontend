@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
+import { ArrowUp } from "lucide-react";
 
 import config from "@/config";
 
@@ -15,10 +17,10 @@ export default function Footer() {
               <button type="button" className="btn btn-primary btn-small">Join</button>
             </div>
             <div className="payment-row">
-              <span className="payment-pill">Visa</span>
-              <span className="payment-pill">Mastercard</span>
-              <span className="payment-pill">Koko</span>
-              <span className="payment-pill">Wallets</span>
+              <Image src="/images/payments/visa-logo.png" alt="Visa" width={52} height={32} className="payment-logo" />
+              <Image src="/images/payments/mastercard-logo.png" alt="Mastercard" width={52} height={32} className="payment-logo" />
+              <Image src="/images/payments/koko-logo.png" alt="Koko" width={58} height={26} className="payment-logo payment-logo-koko" />
+              <Image src="/images/payments/webxpay-cards.png" alt="Webxpay accepted cards" width={86} height={32} className="payment-logo payment-logo-webxpay" />
             </div>
           </div>
 
@@ -50,17 +52,24 @@ export default function Footer() {
             <p>Mon–Sat: 9:00 AM – 7:00 PM</p>
             <p>{config.phone}</p>
             <p>{config.email}</p>
-            <div className="payment-row">
-              <Link href="https://facebook.com" target="_blank" rel="noreferrer">Facebook</Link>
-              <Link href="https://youtube.com" target="_blank" rel="noreferrer">YouTube</Link>
-              <Link href="https://tiktok.com" target="_blank" rel="noreferrer">TikTok</Link>
+            <div className="social-links" aria-label="Social media links">
+              <Link href="https://www.facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook"><Image src="/images/social/facebook.png" alt="" width={18} height={18} /><span>Facebook</span></Link>
+              <Link href="https://www.youtube.com" target="_blank" rel="noreferrer" aria-label="YouTube"><Image src="/images/social/youtube.png" alt="" width={18} height={18} /><span>YouTube</span></Link>
+              <Link href="https://www.instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram"><Image src="/images/social/instagram.png" alt="" width={18} height={18} /><span>Instagram</span></Link>
             </div>
           </div>
         </div>
 
         <div className="footer-bottom">
           <p>© 2026 Smart Apparel Solutions</p>
-          <Link href="#top" className="btn btn-outline btn-small">Back to top</Link>
+          <div className="footer-bottom-actions">
+            <Link href={config.whatsappUrl} target="_blank" rel="noreferrer" className="footer-whatsapp" aria-label="Chat on WhatsApp" title="Chat on WhatsApp">
+              <Image src="/images/social/whatsapp.png" alt="" width={22} height={22} />
+            </Link>
+            <Link href="#top" className="back-to-top" aria-label="Back to top" title="Back to top">
+              <ArrowUp size={20} strokeWidth={2.5} aria-hidden="true" />
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

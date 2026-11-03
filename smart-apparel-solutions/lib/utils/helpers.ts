@@ -8,7 +8,7 @@ export function formatCurrency(amount: number, currency = "LKR"): string {
   }).format(Math.round(safeAmount));
 
   if (currency === "LKR") {
-    return `රු${formatted}`;
+    return `රු ${formatted}`;
   }
 
   return `Rs. ${formatted}`;

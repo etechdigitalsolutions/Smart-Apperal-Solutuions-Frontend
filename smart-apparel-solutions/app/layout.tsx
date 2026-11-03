@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${notoSansSinhala.variable}`}>
+      <body id="top" className={`${inter.variable} ${notoSansSinhala.variable}`}>
         <CartProvider>{children}</CartProvider>
       </body>
     </html>

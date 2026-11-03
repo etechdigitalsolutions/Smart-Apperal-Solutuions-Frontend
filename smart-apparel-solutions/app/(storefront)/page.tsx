@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import ProductCard from "@/components/storefront/products/ProductCard";
+import HeroSlideshow from "@/components/storefront/home/HeroSlideshow";
 import { brands } from "@/data/brands";
 import { categories } from "@/data/categories";
 import { products } from "@/data/products";
@@ -39,10 +40,13 @@ export default function HomePage() {
             </div>
             <div className="hero-proof"><span>01</span><p>Trusted machines<br />for serious makers</p></div>
           </div>
-          <div className="home-hero-image">
-            <Image src={products[0].images[0]} alt="Industrial sewing equipment" fill priority sizes="(max-width: 900px) 100vw, 60vw" />
-            <div className="hero-image-note"><span>01 / 03</span><strong>Built for<br />productive workshops.</strong></div>
-          </div>
+          <HeroSlideshow
+            slides={[
+              { image: products[0].images[0], alt: `${products[0].name} industrial sewing equipment`, eyebrow: "Built for", title: "productive workshops." },
+              { image: products[2].images[0], alt: `${products[2].name} cutting equipment`, eyebrow: "Precision for", title: "every production line." },
+              { image: products[4].images[0], alt: `${products[4].name} finishing equipment`, eyebrow: "Finish with", title: "confidence." },
+            ]}
+          />
         </div>
       </section>
 

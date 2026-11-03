@@ -106,7 +106,7 @@ export default function Header() {
         <div className="container announcement-inner">
           <span>{config.announcement}</span>
           <Link href={config.whatsappUrl} target="_blank" rel="noreferrer">
-            WhatsApp
+            <span className="header-whatsapp-link"><Image src="/images/social/whatsapp.png" alt="" width={15} height={15} /> WhatsApp</span>
           </Link>
         </div>
       </div>
@@ -146,7 +146,7 @@ export default function Header() {
 
           <div className="header-meta">
             <Link href={`tel:${config.phone.replace(/\s+/g, "")}`} className="header-meta-link">
-              <span aria-hidden="true">+94</span>
+              <span aria-hidden="true"></span>
               <strong>{config.phone}</strong>
             </Link>
             <Link href="/login" className="header-action header-icon-action" aria-label="Account"><UserRound size={18} /><span>Account</span></Link>
@@ -207,9 +207,9 @@ export default function Header() {
 
       <div className="secondary-links">
         <div className="container secondary-links-inner">
-          {secondaryLinks.map((link) => (
-            <Link key={link.href} href={link.href}>{link.label}</Link>
-          ))}
+            {secondaryLinks.map((link) => (
+              <Link key={link.href} href={link.href}>{link.label}</Link>
+            ))}
         </div>
       </div>
 

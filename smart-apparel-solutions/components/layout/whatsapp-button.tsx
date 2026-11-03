@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import config from "@/config";
 
@@ -11,7 +12,8 @@ export default function WhatsAppButton() {
       className="floating-whatsapp"
       aria-label="Chat on WhatsApp"
     >
-      WhatsApp
+      <Image src="/images/social/whatsapp.png" alt="" width={19} height={19} />
+      <span>WhatsApp</span>
     </Link>
   );
 }
