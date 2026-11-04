@@ -12,9 +12,10 @@ function ProductsCatalogue() {
   const initialSearch = searchParams.get("q") ?? "";
   const initialCategory = searchParams.get("category") ?? "";
   const initialTag = searchParams.get("tag") ?? "";
+  const initialBrand = searchParams.get("brand") ?? "";
   const [query, setQuery] = useState(initialSearch);
   const [category, setCategory] = useState(initialCategory);
-  const [brand, setBrand] = useState("");
+  const [brand, setBrand] = useState(initialBrand);
   const [availability, setAvailability] = useState("all");
   const [sort, setSort] = useState("featured");
 

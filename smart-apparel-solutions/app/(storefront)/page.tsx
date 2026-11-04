@@ -3,7 +3,6 @@ import Link from "next/link";
 
 import ProductCard from "@/components/storefront/products/ProductCard";
 import HeroSlideshow from "@/components/storefront/home/HeroSlideshow";
-import { brands } from "@/data/brands";
 import { categories } from "@/data/categories";
 import { products } from "@/data/products";
 
@@ -21,6 +20,16 @@ const categoryImages: Record<string, string> = {
   embroidery: products[6].images[0],
   "spare-parts": products[7].images[0],
 };
+
+const brandLogos = [
+  { name: "Worlden", src: "/images/brand-logos/slazzer-preview-xy5r7.png" },
+  { name: "Jack", src: "/images/brand-logos/jack.webp" },
+  { name: "Silverstar", src: "/images/brand-logos/silverstar-removebg-preview.png" },
+  { name: "Singer", src: "/images/brand-logos/singer-logo.webp" },
+  { name: "Golden Eagle", src: "/images/brand-logos/golden-eagle.webp" },
+  { name: "Zoje", src: "/images/brand-logos/slazzer-preview-ebz95.png" },
+  { name: "Shengtian", src: "/images/brand-logos/sheng-removebg-preview.png" },
+];
 
 export default function HomePage() {
   const featureProducts = products.slice(0, 4);
@@ -90,7 +99,7 @@ export default function HomePage() {
       </section>
 
       <section className="section home-section brand-section">
-        <div className="container"><div className="section-header"><div><p className="eyebrow">Brands we stand behind</p><h2>Made to work hard</h2></div></div><div className="brand-grid">{brands.slice(0, 6).map((brand) => <div className="brand-wordmark" key={brand.id}>{brand.name}</div>)}</div></div>
+        <div className="container"><div className="section-header"><div><p className="eyebrow">Brands we stand behind</p><h2>Made to work hard</h2></div></div><div className="brand-grid">{brandLogos.map((brand) => <div className="brand-wordmark" key={brand.name}><Image src={brand.src} alt={brand.name} width={190} height={72} /></div>)}</div></div>
       </section>
     </>
   );

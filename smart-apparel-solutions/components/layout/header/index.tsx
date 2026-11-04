@@ -36,6 +36,11 @@ export default function Header() {
   const navigationRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
   const reducedMotion = useReducedMotion();
+  const isNavItemActive = (slug: string) => {
+    if (slug === "equipment") return pathname === "/products";
+    if (slug === "brands") return false;
+    return pathname.includes(slug);
+  };
 
   const suggestions = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -119,15 +124,8 @@ export default function Header() {
 
           <div className="header-search-wrap" ref={searchRef}>
             <form className="header-search" action="/search" method="get" onSubmit={() => setSearchOpen(false)}>
-              <Search size={17} aria-hidden="true" />
+              <span className="header-search-icon" aria-hidden="true"><Search size={21} strokeWidth={2.25} /></span>
               <input type="search" name="q" value={query} onFocus={() => setSearchOpen(true)} onChange={(event) => { setQuery(event.target.value); setSearchOpen(true); }} placeholder="Search machines, parts and brands" aria-label="Search products" />
-              <select name="category" aria-label="Search category">
-                <option value="all">All</option>
-                <option value="machines">Machines</option>
-                <option value="spare-parts">Spare Parts</option>
-                <option value="needles">Needles</option>
-                <option value="accessories">Accessories</option>
-              </select>
             </form>
             <AnimatePresence>
               {searchOpen && query.trim() ? (
@@ -171,13 +169,14 @@ export default function Header() {
           {navigation.map((item) => (
             <div key={item.slug} className={`nav-item${openNav === item.slug ? " is-open" : ""}`}>
               <div className="nav-item-link">
-                <Link href={`/products?category=${item.slug}`} className={pathname.includes(item.slug) ? "is-active" : ""}>{item.label}</Link>
+                <Link href={item.href ?? `/products?category=${item.slug}`} className={isNavItemActive(item.slug) ? "is-active" : ""}>{item.label}</Link>
                 {item.children?.length ? (
                   <button
                     type="button"
                     className="nav-item-toggle"
                     aria-label={`${openNav === item.slug ? "Close" : "Open"} ${item.label} menu`}
                     aria-expanded={openNav === item.slug}
+                    aria-haspopup="menu"
                     onClick={() => setOpenNav((value) => value === item.slug ? null : item.slug)}
                   >
                     <ChevronDown size={14} aria-hidden="true" />
@@ -189,11 +188,11 @@ export default function Header() {
                   <div className="mega-panel-intro">
                     <span className="mega-panel-kicker">Explore</span>
                     <strong>{item.label}</strong>
-                    <Link href={`/products?category=${item.slug}`}>View all <span aria-hidden="true">↗</span></Link>
+                    <Link href={item.href ?? `/products?category=${item.slug}`}>View all <span aria-hidden="true">↗</span></Link>
                   </div>
-                  <div className="mega-panel-links">
+                  <div className="mega-panel-links" role="menu">
                     {item.children.map((child) => (
-                      <Link key={child.slug} href={`/products?tag=${child.slug}`} className={pathname.includes(child.slug) ? "is-active" : ""}>
+                      <Link key={child.slug} href={child.href ?? `/products?tag=${child.slug}`} className={pathname.includes(child.slug) ? "is-active" : ""} role="menuitem" onClick={() => setOpenNav(null)}>
                         <span>{child.label}</span><span aria-hidden="true">↗</span>
                       </Link>
                     ))}
@@ -204,14 +203,6 @@ export default function Header() {
           ))}
         </div>
       </nav>
-
-      <div className="secondary-links">
-        <div className="container secondary-links-inner">
-            {secondaryLinks.map((link) => (
-              <Link key={link.href} href={link.href}>{link.label}</Link>
-            ))}
-        </div>
-      </div>
 
       <AnimatePresence>
       {mobileOpen ? (
@@ -224,8 +215,8 @@ export default function Header() {
           </div>
           {navigation.map((item) => (
             <div key={item.slug} className="mobile-menu-group">
-              <div className="mobile-menu-heading"><Link href={`/products?category=${item.slug}`} onClick={() => setMobileOpen(false)}>{item.label}</Link>{item.children?.length ? <button type="button" aria-label={`Expand ${item.label}`} aria-expanded={expandedMobile === item.slug} onClick={() => setExpandedMobile((value) => value === item.slug ? null : item.slug)}><ChevronDown size={17} /></button> : null}</div>
-              <AnimatePresence>{expandedMobile === item.slug ? <motion.div className="mobile-menu-children" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>{item.children?.map((child) => <Link key={child.slug} href={`/products?tag=${child.slug}`} onClick={() => setMobileOpen(false)} className="mobile-menu-subitem">{child.label}</Link>)}</motion.div> : null}</AnimatePresence>
+              <div className="mobile-menu-heading"><Link href={item.href ?? `/products?category=${item.slug}`} onClick={() => setMobileOpen(false)}>{item.label}</Link>{item.children?.length ? <button type="button" aria-label={`Expand ${item.label}`} aria-expanded={expandedMobile === item.slug} onClick={() => setExpandedMobile((value) => value === item.slug ? null : item.slug)}><ChevronDown size={17} /></button> : null}</div>
+              <AnimatePresence>{expandedMobile === item.slug ? <motion.div className="mobile-menu-children" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>{item.children?.map((child) => <Link key={child.slug} href={child.href ?? `/products?tag=${child.slug}`} onClick={() => setMobileOpen(false)} className="mobile-menu-subitem">{child.label}</Link>)}</motion.div> : null}</AnimatePresence>
             </div>
           ))}
           <div className="mobile-menu-secondary">
