@@ -20,6 +20,11 @@ export const metadata: Metadata = {
   title: "Smart Apparel Solutions",
   description: "Industrial sewing, cutting & finishing machines, spare parts and accessories in Sri Lanka",
   metadataBase: new URL("https://www.smartapparelsolutions.lk"),
+  icons: {
+    icon: "/images/logo/smart-apperal-logo.png",
+    shortcut: "/images/logo/smart-apperal-logo.png",
+    apple: "/images/logo/smart-apperal-logo.png",
+  },
   openGraph: {
     title: "Smart Apparel Solutions",
     description: "Industrial sewing, cutting & finishing machines, spare parts and accessories in Sri Lanka",
