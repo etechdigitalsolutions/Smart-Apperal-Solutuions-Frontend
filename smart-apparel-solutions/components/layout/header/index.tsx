@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation";
 import config from "@/config";
 import { navigation } from "@/data/navigation";
 import { products } from "@/data/products";
+import MegaMenu, { AllCategoriesTrigger, MobileMegaMenu } from "./MegaMenu";
 import { useCart } from "@/hooks/useCart";
 import { useWishlist } from "@/hooks/useWishlist";
 import { formatCurrency } from "@/lib/utils/helpers";
@@ -31,6 +32,8 @@ export default function Header() {
   const [query, setQuery] = useState("");
   const [expandedMobile, setExpandedMobile] = useState<string | null>(null);
   const [openNav, setOpenNav] = useState<string | null>(null);
+  const [allCategoriesOpen, setAllCategoriesOpen] = useState(false);
+  const [mobileCategoryOpen, setMobileCategoryOpen] = useState<string | null>(null);
   const [isHidden, setIsHidden] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const navigationRef = useRef<HTMLElement>(null);
@@ -56,6 +59,7 @@ export default function Header() {
         setSearchOpen(false);
         setMobileOpen(false);
         setOpenNav(null);
+        setAllCategoriesOpen(false);
       }
     };
     const handlePointerDown = (event: PointerEvent) => {
@@ -166,6 +170,10 @@ export default function Header() {
 
       <nav className="mega-nav" aria-label="Main navigation" ref={navigationRef}>
         <div className="container mega-nav-inner">
+          <div className="all-categories-nav-item" onMouseEnter={() => setAllCategoriesOpen(true)} onMouseLeave={() => setAllCategoriesOpen(false)}>
+            <AllCategoriesTrigger open={allCategoriesOpen} onToggle={() => setAllCategoriesOpen((value) => !value)} />
+            <MegaMenu open={allCategoriesOpen} onClose={() => setAllCategoriesOpen(false)} pathname={pathname} />
+          </div>
           {navigation.map((item) => (
             <div key={item.slug} className={`nav-item${openNav === item.slug ? " is-open" : ""}`}>
               <div className="nav-item-link">
@@ -213,7 +221,8 @@ export default function Header() {
             <span>Menu</span>
             <button type="button" onClick={() => setMobileOpen(false)} aria-label="Close navigation menu"><X size={20} /></button>
           </div>
-          {navigation.map((item) => (
+          <MobileMegaMenu openGroup={mobileCategoryOpen} onToggle={(slug) => setMobileCategoryOpen((value) => value === slug ? null : slug)} onClose={() => setMobileOpen(false)} />
+          {navigation.filter((item) => item.slug === "services-support" || item.slug === "company").map((item) => (
             <div key={item.slug} className="mobile-menu-group">
               <div className="mobile-menu-heading"><Link href={item.href ?? `/products?category=${item.slug}`} onClick={() => setMobileOpen(false)}>{item.label}</Link>{item.children?.length ? <button type="button" aria-label={`Expand ${item.label}`} aria-expanded={expandedMobile === item.slug} onClick={() => setExpandedMobile((value) => value === item.slug ? null : item.slug)}><ChevronDown size={17} /></button> : null}</div>
               <AnimatePresence>{expandedMobile === item.slug ? <motion.div className="mobile-menu-children" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>{item.children?.map((child) => <Link key={child.slug} href={child.href ?? `/products?tag=${child.slug}`} onClick={() => setMobileOpen(false)} className="mobile-menu-subitem">{child.label}</Link>)}</motion.div> : null}</AnimatePresence>
