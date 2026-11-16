@@ -6484,3 +6484,7 @@ body .auth-mobile-home {
     margin-top: .5rem;
   }
 }
+body .auth-field-input {
+  padding-left: 2.7rem !important;
+  padding-right: 2.9rem !important;
+}
