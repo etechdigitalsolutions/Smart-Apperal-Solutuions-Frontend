@@ -167,18 +167,27 @@ export default function Header() {
             </AnimatePresence>
           </div>
 
+          
           <div className="header-meta">
-            <Link href="/login" className="header-action header-icon-action" aria-label="Account"><UserRound size={18} /><span>Account</span></Link>
             <Link href="/account/wishlist" className="header-action">
-              <Heart size={18} aria-hidden="true" /><span className="header-action-label">Wishlist</span>
+              <Heart size={18} aria-hidden="true" />
+              <span className="header-action-label">Wishlist</span>
               <span className="header-badge">{wishlist.length}</span>
             </Link>
+
             <Link href="/cart" className="header-action">
-              <ShoppingBag size={18} aria-hidden="true" /><span className="header-action-label">Cart</span>
+              <ShoppingBag size={18} aria-hidden="true" />
+              <span className="header-action-label">Cart</span>
               <span className="header-badge">{itemCount}</span>
               <strong className="header-cart-total">{formatCurrency(subtotal)}</strong>
             </Link>
+
+            <Link href="/login" className="header-action header-icon-action" aria-label="Account">
+              <UserRound size={18} />
+              <span>Account</span>
+            </Link>
           </div>
+
         </div>
       </div>
 
