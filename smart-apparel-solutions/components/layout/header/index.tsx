@@ -38,6 +38,15 @@ export default function Header() {
   const searchRef = useRef<HTMLDivElement>(null);
   const navigationRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
+  useEffect(() => {
+  // Close all navigation menus after navigating to another page.
+  setOpenNav(null);
+  setAllCategoriesOpen(false);
+  setMobileOpen(false);
+  setMobileCategoryOpen(null);
+  setExpandedMobile(null);
+  setSearchOpen(false);
+}, [pathname]);
   const reducedMotion = useReducedMotion();
   const isNavItemActive = (slug: string) => {
     if (slug === "equipment") return pathname === "/products";
@@ -158,18 +167,27 @@ export default function Header() {
             </AnimatePresence>
           </div>
 
+          
           <div className="header-meta">
-            <Link href="/login" className="header-action header-icon-action" aria-label="Account"><UserRound size={18} /><span>Account</span></Link>
             <Link href="/account/wishlist" className="header-action">
-              <Heart size={18} aria-hidden="true" /><span className="header-action-label">Wishlist</span>
+              <Heart size={18} aria-hidden="true" />
+              <span className="header-action-label">Wishlist</span>
               <span className="header-badge">{wishlist.length}</span>
             </Link>
+
             <Link href="/cart" className="header-action">
-              <ShoppingBag size={18} aria-hidden="true" /><span className="header-action-label">Cart</span>
+              <ShoppingBag size={18} aria-hidden="true" />
+              <span className="header-action-label">Cart</span>
               <span className="header-badge">{itemCount}</span>
               <strong className="header-cart-total">{formatCurrency(subtotal)}</strong>
             </Link>
+
+            <Link href="/login" className="header-action header-icon-action" aria-label="Account">
+              <UserRound size={18} />
+              <span>Account</span>
+            </Link>
           </div>
+
         </div>
       </div>
 
@@ -179,9 +197,19 @@ export default function Header() {
             <AllCategoriesTrigger open={allCategoriesOpen} onToggle={() => setAllCategoriesOpen((value) => !value)} />
             <MegaMenu open={allCategoriesOpen} onClose={() => setAllCategoriesOpen(false)} pathname={pathname} />
           </div>
+          
           {navigation.map((item) => (
-            <div key={item.slug} className={`nav-item${openNav === item.slug ? " is-open" : ""}`}>
+            <div
+              key={item.slug}
+              className={`nav-item${openNav === item.slug ? " is-open" : ""}`}
+              onMouseEnter={() => {
+                setOpenNav(item.children?.length ? item.slug : null);
+                setAllCategoriesOpen(false);
+              }}
+              onMouseLeave={() => setOpenNav(null)}
+            >
               <div className="nav-item-link">
+
                 <Link href={item.href ?? `/products?category=${item.slug}`} className={isNavItemActive(item.slug) ? "is-active" : ""}>{item.label}</Link>
                 {item.children?.length ? (
                   <button
