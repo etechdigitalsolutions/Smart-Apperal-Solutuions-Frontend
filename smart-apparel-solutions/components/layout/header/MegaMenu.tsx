@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronDown, LayoutGrid } from "lucide-react";
+
 
 import { megaMenuGroups, type MegaMenuGroup } from "@/data/mega-menu";
 
@@ -30,7 +32,15 @@ export function AllCategoriesTrigger({ open, onToggle }: AllCategoriesTriggerPro
   );
 }
 
+
+
 export default function MegaMenu({ open, onClose, pathname }: MegaMenuProps) {
+  const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
+
+  function toggleGroup(slug: string) {
+    setExpandedGroup((current) => (current === slug ? null : slug));
+  }
+
   return (
     <AnimatePresence>
       {open ? (
@@ -40,25 +50,69 @@ export default function MegaMenu({ open, onClose, pathname }: MegaMenuProps) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.18 }}
-          onMouseEnter={() => undefined}
           role="menu"
           aria-label="All product categories"
         >
           <div className="mega-menu-inner">
-            {megaMenuGroups.map((group) => (
-              <section className={`mega-menu-group mega-menu-group-${group.slug}`} key={group.label}>
-                <Link href={categoryHref(group.slug)} className={`mega-menu-heading${pathname.includes(group.slug) ? " is-active" : ""}`} onClick={onClose}>
-                  <span>{group.label}</span><span aria-hidden="true">↗</span>
-                </Link>
-                <div className="mega-menu-links">
-                  {group.items.map((item) => (
-                    <Link key={item.slug} href={itemHref(group, item.slug)} onClick={onClose} role="menuitem">
-                      {item.label}
+            {megaMenuGroups.map((group) => {
+              const isExpanded = expandedGroup === group.label;
+
+              return (
+                <section
+                  className={`mega-menu-group mega-menu-group-${group.slug}${
+                    isExpanded ? " is-expanded" : ""
+                  }`}
+                  key={group.label}
+                >
+                  <div className="mega-menu-heading">
+                    <Link
+                      href={categoryHref(group.slug)}
+                      className={
+                        pathname.includes(group.slug) ? "is-active" : ""
+                      }
+                      onClick={onClose}
+                    >
+                      {group.label}
                     </Link>
-                  ))}
-                </div>
-              </section>
-            ))}
+
+                    <button
+                      type="button"
+                      className="mega-menu-expand"
+                      aria-label={`${isExpanded ? "Collapse" : "Expand"} ${group.label}`}
+                      aria-expanded={isExpanded}
+                      onClick={() => toggleGroup(group.label)}
+                    >
+                      <ChevronDown
+                        size={17}
+                        className={isExpanded ? "is-rotated" : ""}
+                      />
+                    </button>
+                  </div>
+
+                  <AnimatePresence initial={false}>
+                    {isExpanded && (
+                      <motion.div
+                        className="mega-menu-links"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {group.items.map((item) => (
+                          <Link
+                            key={item.slug}
+                            href={itemHref(group, item.slug)}
+                            onClick={onClose}
+                          >
+                            {item.label}
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </section>
+              );
+            })}
           </div>
         </motion.div>
       ) : null}
@@ -66,27 +120,76 @@ export default function MegaMenu({ open, onClose, pathname }: MegaMenuProps) {
   );
 }
 
-export function MobileMegaMenu({ openGroup, onToggle, onClose }: { openGroup: string | null; onToggle: (slug: string) => void; onClose: () => void }) {
+
+
+export function MobileMegaMenu({
+  openGroup,
+  onToggle,
+  onClose,
+}: {
+  openGroup: string | null;
+  onToggle: (slug: string) => void;
+  onClose: () => void;
+}) {
   return (
     <div className="mobile-category-menu">
-      <div className="mobile-category-title"><LayoutGrid size={17} aria-hidden="true" /><strong>All Categories</strong></div>
-      {megaMenuGroups.map((group) => (
-        <div className="mobile-menu-group mobile-category-group" key={group.label}>
-          <div className="mobile-menu-heading">
-            <Link href={categoryHref(group.slug)} onClick={onClose}>{group.label}</Link>
-            <button type="button" aria-label={`${openGroup === group.slug ? "Collapse" : "Expand"} ${group.label}`} aria-expanded={openGroup === group.slug} onClick={() => onToggle(group.slug)}>
-              <ChevronDown size={17} aria-hidden="true" />
-            </button>
+      <div className="mobile-category-title">
+        <LayoutGrid size={17} aria-hidden="true" />
+        <strong>All Categories</strong>
+      </div>
+
+      {megaMenuGroups.map((group) => {
+        const isExpanded = openGroup === group.label;
+
+        return (
+          <div
+            className="mobile-menu-group mobile-category-group"
+            key={group.label}
+          >
+            <div className="mobile-menu-heading">
+              <Link href={categoryHref(group.slug)} onClick={onClose}>
+                {group.label}
+              </Link>
+
+              <button
+                type="button"
+                aria-label={`${isExpanded ? "Collapse" : "Expand"} ${group.label}`}
+                aria-expanded={isExpanded}
+                onClick={() => onToggle(group.label)}
+              >
+                <ChevronDown
+                  size={17}
+                  className={isExpanded ? "is-rotated" : ""}
+                />
+              </button>
+            </div>
+
+            <AnimatePresence initial={false}>
+              {isExpanded && (
+                <motion.div
+                  className="mobile-menu-children"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {group.items.map((item) => (
+                    <Link
+                      key={item.slug}
+                      href={itemHref(group, item.slug)}
+                      onClick={onClose}
+                      className="mobile-menu-subitem"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-          <AnimatePresence initial={false}>
-            {openGroup === group.slug ? (
-              <motion.div className="mobile-menu-children" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
-                {group.items.map((item) => <Link key={item.slug} href={itemHref(group, item.slug)} onClick={onClose} className="mobile-menu-subitem">{item.label}</Link>)}
-              </motion.div>
-            ) : null}
-          </AnimatePresence>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
+
