@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -12,6 +13,10 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <main className="cart-page cart-empty container">
+        <Link href="/" className="link-arrow account-back-home">
+          ← Back to Home
+        </Link>
+
         <h1>Your cart</h1>
         <p>Your cart is empty.</p>
         <Link href="/products" className="btn btn-primary">
@@ -23,6 +28,10 @@ export default function CartPage() {
 
   return (
     <main className="cart-page container">
+      <Link href="/" className="link-arrow account-back-home">
+        ← Back to Home
+      </Link>
+
       <h1>Your cart</h1>
 
       <div className="cart-layout">

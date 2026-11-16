@@ -12,7 +12,9 @@ import { formatKokoInstallment } from "@/lib/utils/koko";
 import type { Product } from "@/types";
 
 export default function ProductCard({ product }: { product: Product }) {
-  const isOutOfStock = product.stockStatus === "out_of_stock";
+  const isUnavailable =
+   product.stockStatus === "out_of_stock" ||
+   product.stockStatus === "pre_order";
   const { addItem } = useCart();
   const { wishlist, toggle } = useWishlist();
   const isWishlisted = wishlist.includes(product.id);
@@ -55,7 +57,9 @@ export default function ProductCard({ product }: { product: Product }) {
           {labelBadges.map((badge) => (
             <span key={badge} className="badge badge-new">{badge}</span>
           ))}
-          {isOutOfStock && <span className="badge badge-soldout">Out of Stock</span>}
+          {isUnavailable && (
+            <span className="badge badge-soldout">Coming Soon</span>
+          )}
         </div>
 
         <motion.button type="button" whileTap={{ scale: 0.88 }} className={`product-favorite ${isWishlisted ? "is-wishlisted" : ""}`} aria-label={`${isWishlisted ? "Remove" : "Save"} ${product.name}`} onClick={() => toggle(product.id)}>
@@ -109,19 +113,32 @@ export default function ProductCard({ product }: { product: Product }) {
           </div>
 
 
-        <div className={`product-stock is-${product.stockStatus}`}>
-          <span className="stock-dot" aria-hidden="true" />
-          {product.stockStatus === "in_stock" ? "In stock" : product.stockStatus === "pre_order" ? "Pre-order" : "Out of stock"}
-        </div>
+        {isUnavailable ? (
+          <div className="product-stock is-unavailable">
+            <span className="stock-dot" aria-hidden="true" />
+            Coming Soon
+          </div>
+        ) : (
+          <div className="product-stock is-in_stock">
+            <span className="stock-dot" aria-hidden="true" />
+            In stock
+          </div>
+        )}
 
         <div className="product-actions">
           <motion.button
             whileTap={{ scale: 0.97 }}
             type="button"
             className="btn btn-primary btn-small"
-            disabled={isOutOfStock}
-            onClick={() => addItem({ productId: product.id, product, quantity: 1 })}
-          >{isOutOfStock ? "View details" : <><Plus size={15} /> Add to cart</>}</motion.button>
+              disabled={isUnavailable}
+              onClick={() => {
+                if (!isUnavailable) {
+                  addItem({ productId: product.id, product, quantity: 1 });
+                }
+              }}
+              >
+                {isUnavailable ? "Coming Soon" : <><Plus size={15} /> Add to cart</>}
+              </motion.button>
           <Link href={`/products/${product.slug}`} className="btn btn-small-outline btn-small">
             Read more
           </Link>
