@@ -122,6 +122,10 @@ export default function Header() {
 
       <div className="header-main">
         <div className="container header-inner">
+          <button type="button" className="header-action mobile-menu-trigger" onClick={() => { setIsHidden(false); setMobileOpen((value) => !value); }} aria-expanded={mobileOpen} aria-label={mobileOpen ? "Close menu" : "Open menu"}>
+            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+
           <Link href="/" className="brand-mark" aria-label="Smart Apparel Solutions home">
             <Image src="/images/logo/smart-apperal-logo.png" alt="Smart Apparel Solutions" width={142} height={68} priority />
           </Link>
@@ -135,10 +139,18 @@ export default function Header() {
               {searchOpen && query.trim() ? (
                 <motion.div className="search-suggestions" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} role="listbox">
                   {suggestions.length ? suggestions.map((product) => (
-                    <Link key={product.id} href={`/products/${product.slug}`} className="search-suggestion" onClick={() => setSearchOpen(false)}>
-                      <span><strong>{product.name}</strong><small>{product.brand} · {product.modelCode}</small></span>
-                      <b>{formatCurrency(product.price)}</b>
-                    </Link>
+                    <Link
+                        key={product.id}
+                        href={`/products/${product.slug}`}
+                        className="search-suggestion"
+                        onClick={() => setSearchOpen(false)}
+                      >
+                        <span>
+                          <strong>{product.name}</strong>
+                          <b>{formatCurrency(product.price)}</b>
+                          <small>{product.brand} · {product.modelCode}</small>
+                        </span>
+                      </Link>
                   )) : <p className="search-empty">No products found. Try a brand or model number.</p>}
                   <Link href={`/search?q=${encodeURIComponent(query)}`} className="search-view-all" onClick={() => setSearchOpen(false)}>View all results <span>↗</span></Link>
                 </motion.div>
@@ -147,10 +159,6 @@ export default function Header() {
           </div>
 
           <div className="header-meta">
-            <Link href={`tel:${config.phone.replace(/\s+/g, "")}`} className="header-meta-link">
-              <span aria-hidden="true"></span>
-              <strong>{config.phone}</strong>
-            </Link>
             <Link href="/login" className="header-action header-icon-action" aria-label="Account"><UserRound size={18} /><span>Account</span></Link>
             <Link href="/account/wishlist" className="header-action">
               <Heart size={18} aria-hidden="true" /><span className="header-action-label">Wishlist</span>
@@ -161,9 +169,6 @@ export default function Header() {
               <span className="header-badge">{itemCount}</span>
               <strong className="header-cart-total">{formatCurrency(subtotal)}</strong>
             </Link>
-            <button type="button" className="header-action mobile-menu-trigger" onClick={() => { setIsHidden(false); setMobileOpen((value) => !value); }} aria-expanded={mobileOpen} aria-label={mobileOpen ? "Close menu" : "Open menu"}>
-              {mobileOpen ? <X size={20} /> : <Menu size={20} />}<span>Menu</span>
-            </button>
           </div>
         </div>
       </div>
@@ -194,9 +199,7 @@ export default function Header() {
               {item.children && item.children.length > 0 ? (
                 <div className="mega-panel" aria-label={`${item.label} menu`}>
                   <div className="mega-panel-intro">
-                    <span className="mega-panel-kicker">Explore</span>
                     <strong>{item.label}</strong>
-                    <Link href={item.href ?? `/products?category=${item.slug}`}>View all <span aria-hidden="true">↗</span></Link>
                   </div>
                   <div className="mega-panel-links" role="menu">
                     {item.children.map((child) => (
@@ -229,7 +232,6 @@ export default function Header() {
             </div>
           ))}
           <div className="mobile-menu-secondary">
-            <Link href="/login" onClick={() => setMobileOpen(false)}>Account</Link>
             {secondaryLinks.map((link) => <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}>{link.label}</Link>)}
           </div>
           </motion.div>

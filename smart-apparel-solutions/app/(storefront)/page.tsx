@@ -3,14 +3,47 @@ import Link from "next/link";
 
 import ProductCard from "@/components/storefront/products/ProductCard";
 import HeroSlideshow from "@/components/storefront/home/HeroSlideshow";
+import WhatDoYouSew from "@/components/storefront/home/WhatDoYouSew";
 import { categories } from "@/data/categories";
 import { products } from "@/data/products";
+import { Shirt, Scissors, Sparkles, Flower2 } from "lucide-react";
+import {
+PackageSearch,
+  Wrench,
+  CreditCard,
+  PackageCheck,
+  ArrowUpRight,
+} from "lucide-react";
 
 const applications = [
-  { title: "Sewing & construction", copy: "Single needle, overlock and interlock systems.", tag: "sewing-machines" },
-  { title: "Cutting & preparation", copy: "Tools that keep every cut accurate and efficient.", tag: "cutting" },
-  { title: "Finishing & pressing", copy: "A polished finish for every production line.", tag: "ironing-finishing" },
-  { title: "Embroidery & detail", copy: "Bring precision and personality to every piece.", tag: "embroidery" },
+  {
+    title: "Sewing & Construction",
+    copy: "Single needle, overlock and interlock systems.",
+    tag: "sewing-machines",
+    image: products[0].images[0],
+    icon: Shirt,
+  },
+  {
+    title: "Cutting & Preparation",
+    copy: "Tools that keep every cut accurate and efficient.",
+    tag: "cutting",
+    image: products[2].images[0],
+    icon: Scissors,
+  },
+  {
+    title: "Finishing & Pressing",
+    copy: "A polished finish for every production line.",
+    tag: "ironing-finishing",
+    image: products[4].images[0],
+    icon: Sparkles,
+  },
+  {
+    title: "Embroidery & Detail",
+    copy: "Bring precision and personality to every piece.",
+    tag: "embroidery",
+    image: products[6].images[0],
+    icon: Flower2,
+  },
 ];
 
 const categoryImages: Record<string, string> = {
@@ -69,19 +102,120 @@ export default function HomePage() {
         <div className="container">
           <div className="section-intro"><div><p className="eyebrow">Find your fit</p><h2>What are you making?</h2></div><p>Start with the work you do. We&apos;ll help you find equipment that earns its place on the floor.</p></div>
           <div className="application-grid">
-            {applications.map((application, index) => (
-              <Link key={application.tag} href={`/products?category=${application.tag}`} className="application-card">
-                <span className="application-number">0{index + 1}</span><div><h3>{application.title}</h3><p>{application.copy}</p></div><span className="card-arrow">↗</span>
-              </Link>
-            ))}
+            {applications.map((application, index) => {
+              const Icon = application.icon;
+
+              return (
+                <Link
+                  key={application.tag}
+                  href={`/products?category=${application.tag}`}
+                  className="application-card"
+                >
+                  <Image
+                    src={application.image}
+                    alt=""
+                    fill
+                    sizes="(max-width: 640px) 50vw, 25vw"
+                    className="application-image"
+                  />
+
+                  <span className="application-overlay" />
+
+                  <span className="application-topline">
+                    <span className="application-number">0{index + 1}</span>
+                    <span className="application-icon">
+                      <Icon size={21} strokeWidth={1.7} />
+                    </span>
+                  </span>
+
+                  <span className="application-content">
+                    <h3>{application.title}</h3>
+                    <p>{application.copy}</p>
+                  </span>
+
+                  <span className="card-arrow">↗</span>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
+      
+      {/* Product customization - What do you sew? */}
+      <WhatDoYouSew />
 
-      <section className="section home-section home-section-tint">
+      <section className="section home-section home-dashboard-section">
         <div className="container">
-          <div className="section-header"><div><p className="eyebrow">Selected equipment</p><h2>Ready for the next run</h2></div><Link href="/products" className="text-link">Shop all products <span>↗</span></Link></div>
-          <div className="product-grid">{featureProducts.map((product) => <ProductCard key={product.id} product={product} />)}</div>
+
+          <div className="section-header">
+            <div>
+              <p className="eyebrow">Your workshop, simplified</p>
+              <h2>Ready for the next run?</h2>
+            </div>
+            <p className="dashboard-description">
+              Everything you need to keep your production moving, all in one place.
+            </p>
+          </div>
+
+          <div className="dashboard-grid">
+
+            <Link href="/products" className="dashboard-card dashboard-card-primary">
+              <span className="dashboard-card-icon">
+                <PackageSearch size={25} />
+              </span>
+              <span className="dashboard-card-content">
+                <small>01 / EXPLORE</small>
+                <h3>Browse Equipment</h3>
+                <p>Find the right machines and equipment for your production needs.</p>
+              </span>
+              <span className="dashboard-card-arrow">
+                <ArrowUpRight size={22} />
+              </span>
+            </Link>
+
+            <Link href="/services-repair" className="dashboard-card">
+              <span className="dashboard-card-icon">
+                <Wrench size={25} />
+              </span>
+              <span className="dashboard-card-content">
+                <small>02 / SUPPORT</small>
+                <h3>Services & Repair</h3>
+                <p>Get technical assistance, maintenance and repair support.</p>
+              </span>
+              <span className="dashboard-card-arrow">
+                <ArrowUpRight size={22} />
+              </span>
+            </Link>
+
+            <Link href="/installments" className="dashboard-card">
+              <span className="dashboard-card-icon">
+                <CreditCard size={25} />
+              </span>
+              <span className="dashboard-card-content">
+                <small>03 / PAYMENT</small>
+                <h3>Installment Plans</h3>
+                <p>Explore flexible payment options for your equipment purchases.</p>
+              </span>
+              <span className="dashboard-card-arrow">
+                <ArrowUpRight size={22} />
+              </span>
+            </Link>
+
+            <Link href="/track-order" className="dashboard-card">
+              <span className="dashboard-card-icon">
+                <PackageCheck size={25} />
+              </span>
+              <span className="dashboard-card-content">
+                <small>04 / DELIVERY</small>
+                <h3>Track Your Order</h3>
+                <p>Stay informed about the progress of your order.</p>
+              </span>
+              <span className="dashboard-card-arrow">
+                <ArrowUpRight size={22} />
+              </span>
+            </Link>
+
+          </div>
         </div>
       </section>
 

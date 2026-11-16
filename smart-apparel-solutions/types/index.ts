@@ -18,6 +18,7 @@ export interface Product {
   comparePrice?: number;
   images: string[];
   category: string;
+  condition: "brand_new" | "used";
   tags: string[];
   brand: string;
   modelCode: string;
@@ -69,6 +70,26 @@ export interface Order {
   shippingAddress: Address;
   createdAt: string;
 }
+
+
+export interface TrackingOrder {
+  reference: string;
+  customerName: string;
+  email: string;
+  phone: string;
+  items: CartItem[];
+  subtotal: number;
+  promoCode?: string;
+  discount: number;
+  total: number;
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+  delivery: "ship" | "pickup";
+  createdAt: string;
+  trackingNumber?: string;
+  trackingMessage: string;
+}
+
+
 
 export interface Address {
   fullName: string;

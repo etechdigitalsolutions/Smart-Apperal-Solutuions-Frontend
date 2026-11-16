@@ -13,10 +13,12 @@ export default function OrderConfirmationPage() {
 
   const [customer, setCustomer] = useState<CheckoutFormData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [orderReference, setOrderReference] = useState("");
 
   useEffect(() => {
     try {
       const savedDetails = sessionStorage.getItem("checkoutDetails");
+      setOrderReference(sessionStorage.getItem("orderReference") ?? "");
 
       if (!savedDetails) {
         router.replace("/checkout");
@@ -89,6 +91,10 @@ export default function OrderConfirmationPage() {
             We will contact you with availability, delivery timing
             and the best payment option for your order.
           </p>
+          <div className="co-order-reference">
+            <span>Order reference</span>
+            <strong>{orderReference}</strong>
+          </div>
 
           <div className="co-confirm-details">
             <section>

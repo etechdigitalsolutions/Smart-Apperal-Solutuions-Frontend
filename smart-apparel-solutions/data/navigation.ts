@@ -52,6 +52,7 @@ export const navigation: NavItem[] = [
       { label: "Services & Repair", slug: "services-repair", href: "/services-repair" },
       { label: "Installments", slug: "installments", href: "/installments" },
       { label: "Track Order", slug: "track-order", href: "/track-order" },
+      { label: "Apply for Credit Account", slug: "apply-for-credit-account", href: "/login" },
     ],
   },
   {

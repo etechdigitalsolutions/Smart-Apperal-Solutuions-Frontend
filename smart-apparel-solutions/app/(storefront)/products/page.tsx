@@ -1,11 +1,12 @@
 "use client";
 
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import ProductCard from "@/components/storefront/products/ProductCard";
 import { brands } from "@/data/brands";
 import { categories } from "@/data/categories";
 import { products } from "@/data/products";
+import Link from "next/link";
 
 function ProductsCatalogue() {
   const searchParams = useSearchParams();
@@ -18,15 +19,35 @@ function ProductsCatalogue() {
   const [brand, setBrand] = useState(initialBrand);
   const [availability, setAvailability] = useState("all");
   const [sort, setSort] = useState("featured");
+  const [condition, setCondition] = useState("all");
+
+  useEffect(() => {
+  setQuery(searchParams.get("q") ?? "");
+  setCategory(searchParams.get("category") ?? "");
+  setBrand(searchParams.get("brand") ?? "");
+}, [searchParams]);
 
   const filteredProducts = useMemo(() => {
     const result = products.filter((product) => {
       const haystack = `${product.name} ${product.brand} ${product.modelCode} ${product.tags.join(" ")}`.toLowerCase();
-      const matchesQuery = !query && !initialTag || haystack.includes(query.toLowerCase()) || product.tags.includes(initialTag);
+      const matchesQuery =
+        (!query || haystack.includes(query.toLowerCase())) &&
+        (!initialTag || product.tags.includes(initialTag));
       const matchesCategory = !category || product.category.toLowerCase().replaceAll(" ", "-") === category || category === "sewing-machines" && product.category === "Sewing Machines";
       const matchesBrand = !brand || product.brand === brand;
-      const matchesAvailability = availability === "all" || product.stockStatus === availability;
-      return matchesQuery && matchesCategory && matchesBrand && matchesAvailability;
+      const matchesAvailability =
+        availability === "all" || product.stockStatus === availability;
+
+      const matchesCondition =
+        condition === "all" || product.condition === condition;
+
+      return (
+        matchesQuery &&
+        matchesCategory &&
+        matchesBrand &&
+        matchesAvailability &&
+        matchesCondition
+      );
     });
 
     return [...result].sort((a, b) => {
@@ -35,11 +56,15 @@ function ProductsCatalogue() {
       if (sort === "newest") return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       return a.id.localeCompare(b.id);
     });
-  }, [availability, brand, category, initialTag, query, sort]);
+  }, [availability, brand, category, condition, initialTag, query, sort]);
 
   return (
     <main className="page-shell">
       <div className="container">
+        <Link href="/" className="link-arrow account-back-home">
+          ← Back to Home
+        </Link>
+
         <div className="page-heading">
           <p className="eyebrow">Industrial equipment catalogue</p>
           <h1>Machines, parts & workshop essentials</h1>
@@ -51,6 +76,7 @@ function ProductsCatalogue() {
             <label>Search<input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Model, brand or use" /></label>
             <label>Category<select value={category} onChange={(event) => setCategory(event.target.value)}><option value="">All categories</option>{categories.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}</select></label>
             <label>Brand<select value={brand} onChange={(event) => setBrand(event.target.value)}><option value="">All brands</option>{brands.map((item) => <option key={item.id} value={item.name}>{item.name}</option>)}</select></label>
+            <label>Condition<select value={condition} onChange={(event) => setCondition(event.target.value)}><option value="all">All conditions</option><option value="brand_new">Brand New</option><option value="used">Used</option></select></label>
             <label>Availability<select value={availability} onChange={(event) => setAvailability(event.target.value)}><option value="all">All stock states</option><option value="in_stock">In stock</option><option value="pre_order">Pre-order</option><option value="out_of_stock">Out of stock</option></select></label>
             <div className="filter-note"><strong>Need a recommendation?</strong><p>Send us your fabric, operation and daily output. We will suggest a practical machine setup.</p><a href="/contact" className="link-arrow">Talk to a specialist</a></div>
           </aside>
