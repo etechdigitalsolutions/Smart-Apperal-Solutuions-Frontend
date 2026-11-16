@@ -38,6 +38,15 @@ export default function Header() {
   const searchRef = useRef<HTMLDivElement>(null);
   const navigationRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
+  useEffect(() => {
+  // Close all navigation menus after navigating to another page.
+  setOpenNav(null);
+  setAllCategoriesOpen(false);
+  setMobileOpen(false);
+  setMobileCategoryOpen(null);
+  setExpandedMobile(null);
+  setSearchOpen(false);
+}, [pathname]);
   const reducedMotion = useReducedMotion();
   const isNavItemActive = (slug: string) => {
     if (slug === "equipment") return pathname === "/products";
@@ -179,9 +188,19 @@ export default function Header() {
             <AllCategoriesTrigger open={allCategoriesOpen} onToggle={() => setAllCategoriesOpen((value) => !value)} />
             <MegaMenu open={allCategoriesOpen} onClose={() => setAllCategoriesOpen(false)} pathname={pathname} />
           </div>
+          
           {navigation.map((item) => (
-            <div key={item.slug} className={`nav-item${openNav === item.slug ? " is-open" : ""}`}>
+            <div
+              key={item.slug}
+              className={`nav-item${openNav === item.slug ? " is-open" : ""}`}
+              onMouseEnter={() => {
+                setOpenNav(item.children?.length ? item.slug : null);
+                setAllCategoriesOpen(false);
+              }}
+              onMouseLeave={() => setOpenNav(null)}
+            >
               <div className="nav-item-link">
+
                 <Link href={item.href ?? `/products?category=${item.slug}`} className={isNavItemActive(item.slug) ? "is-active" : ""}>{item.label}</Link>
                 {item.children?.length ? (
                   <button
