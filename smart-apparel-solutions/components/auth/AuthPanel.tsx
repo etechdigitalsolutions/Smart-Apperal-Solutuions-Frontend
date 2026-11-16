@@ -540,7 +540,7 @@ export default function AuthPanel({ mode }: AuthPanelProps) {
                     <strong>{DEMO_EMAIL}</strong>
                   </div>
                   <button type="button" onClick={useDemo} className="btn btn-outline">
-                    Autofill
+                    Autofill login
                   </button>
                 </div>
               ) : null}
