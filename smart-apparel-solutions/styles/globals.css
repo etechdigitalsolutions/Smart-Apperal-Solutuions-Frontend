@@ -6089,3 +6089,56 @@ input:focus, select:focus, textarea:focus { border-color: var(--color-accent); o
   color: var(--color-text);
   text-decoration: underline;
 }
+
+
+.mega-menu-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.mega-menu-item-row > a {
+  flex: 1;
+}
+
+.mega-menu-item-row button,
+.mobile-nested-row button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.mega-menu-nested,
+.mobile-menu-nested {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 8px 0 8px 16px;
+  overflow: hidden;
+}
+
+.mega-menu-nested a,
+.mobile-menu-nested a {
+  font-size: 0.85em;
+}
+
+.mobile-nested-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.mobile-nested-row .mobile-menu-subitem {
+  flex: 1;
+}
+
+.is-rotated {
+  transform: rotate(180deg);
+}

@@ -8,6 +8,26 @@ import { categories } from "@/data/categories";
 import { products } from "@/data/products";
 import Link from "next/link";
 
+const menuTagAliases: Record<string, string[]> = {
+  "budget-machine-series": ["budget", "budget-series"],
+  "automated-machines": ["automated"],
+  "single-needle-machines": ["single-needle"],
+  "overlock-machines": ["overlock"],
+  "double-needle-machines": ["double-needle"],
+  "interlock-machines": ["interlock"],
+};
+
+const categoryAliases: Record<string, string[]> = {
+  "sewing-machines": ["sewing machines", "automated machines"],
+  cutting: ["cutting"],
+  "ironing-finishing": ["ironing & finishing"],
+  embroidery: ["embroidery"],
+  "spare-parts": ["spare parts"],
+  needles: ["needles"],
+  accessories: ["accessories"],
+  "home-appliances": ["home appliances"],
+};
+
 function ProductsCatalogue() {
   const searchParams = useSearchParams();
   const initialSearch = searchParams.get("q") ?? "";
@@ -21,42 +41,78 @@ function ProductsCatalogue() {
   const [sort, setSort] = useState("featured");
   const [condition, setCondition] = useState("all");
 
+  const [tag, setTag] = useState(initialTag);
+
   useEffect(() => {
-  setQuery(searchParams.get("q") ?? "");
-  setCategory(searchParams.get("category") ?? "");
-  setBrand(searchParams.get("brand") ?? "");
-}, [searchParams]);
+    setQuery(searchParams.get("q") ?? "");
+    setCategory(searchParams.get("category") ?? "");
+    setBrand(searchParams.get("brand") ?? "");
+    setTag(searchParams.get("tag") ?? "");
+  }, [searchParams]);
 
-  const filteredProducts = useMemo(() => {
-    const result = products.filter((product) => {
-      const haystack = `${product.name} ${product.brand} ${product.modelCode} ${product.tags.join(" ")}`.toLowerCase();
-      const matchesQuery =
-        (!query || haystack.includes(query.toLowerCase())) &&
-        (!initialTag || product.tags.includes(initialTag));
-      const matchesCategory = !category || product.category.toLowerCase().replaceAll(" ", "-") === category || category === "sewing-machines" && product.category === "Sewing Machines";
-      const matchesBrand = !brand || product.brand === brand;
-      const matchesAvailability =
-        availability === "all" || product.stockStatus === availability;
 
-      const matchesCondition =
-        condition === "all" || product.condition === condition;
+const filteredProducts = useMemo(() => {
+  const result = products.filter((product) => {
+    const haystack =
+      `${product.name} ${product.brand} ${product.modelCode} ${product.tags.join(" ")}`.toLowerCase();
 
-      return (
-        matchesQuery &&
-        matchesCategory &&
-        matchesBrand &&
-        matchesAvailability &&
-        matchesCondition
-      );
-    });
+    const matchesQuery =
+      !query || haystack.includes(query.toLowerCase());
 
-    return [...result].sort((a, b) => {
-      if (sort === "price-low") return a.price - b.price;
-      if (sort === "price-high") return b.price - a.price;
-      if (sort === "newest") return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-      return a.id.localeCompare(b.id);
-    });
-  }, [availability, brand, category, condition, initialTag, query, sort]);
+    // Match parent categories and their product categories.
+    const allowedCategories = categoryAliases[category] ?? [category];
+
+    const matchesCategory =
+      !category ||
+      allowedCategories.includes(product.category.toLowerCase());
+
+    // Match menu subcategories using their corresponding product tags.
+    const allowedTags = menuTagAliases[initialTag] ?? [initialTag];
+
+    const matchesTag =
+      !initialTag ||
+      allowedTags.some((tag) => product.tags.includes(tag));
+
+    const matchesBrand =
+      !brand || product.brand === brand;
+
+    const matchesAvailability =
+      availability === "all" ||
+      product.stockStatus === availability;
+
+    const matchesCondition =
+      condition === "all" ||
+      product.condition === condition;
+
+    return (
+      matchesQuery &&
+      matchesCategory &&
+      matchesTag &&
+      matchesBrand &&
+      matchesAvailability &&
+      matchesCondition
+    );
+  });
+
+  return [...result].sort((a, b) => {
+    if (sort === "price-low") return a.price - b.price;
+    if (sort === "price-high") return b.price - a.price;
+    if (sort === "newest") {
+      return new Date(b.createdAt).getTime() -
+        new Date(a.createdAt).getTime();
+    }
+    return a.id.localeCompare(b.id);
+  });
+}, [
+  availability,
+  brand,
+  category,
+  condition,
+  initialTag,
+  query,
+  sort,
+]);
+
 
   return (
     <main className="page-shell">
