@@ -2,11 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Heart, Plus, Tag } from "lucide-react";
 
 import { useCart } from "@/hooks/useCart";
 import { useWishlist } from "@/hooks/useWishlist";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 import { formatCurrency } from "@/lib/utils/helpers";
 import { formatKokoInstallment } from "@/lib/utils/koko";
 import type { Product } from "@/types";
@@ -17,6 +20,9 @@ export default function ProductCard({ product }: { product: Product }) {
    product.stockStatus === "pre_order";
   const { addItem } = useCart();
   const { wishlist, toggle } = useWishlist();
+  const { user } = useAuth();
+  const router = useRouter();
+  const [wishlistMessage, setWishlistMessage] = useState("");
   const isWishlisted = wishlist.includes(product.id);
   const savings =
   product.comparePrice && product.comparePrice > product.price
@@ -62,7 +68,16 @@ export default function ProductCard({ product }: { product: Product }) {
           )}
         </div>
 
-        <motion.button type="button" whileTap={{ scale: 0.88 }} className={`product-favorite ${isWishlisted ? "is-wishlisted" : ""}`} aria-label={`${isWishlisted ? "Remove" : "Save"} ${product.name}`} onClick={() => toggle(product.id)}>
+        <motion.button type="button" whileTap={{ scale: 0.88 }} className={`product-favorite ${isWishlisted ? "is-wishlisted" : ""}`} aria-label={`${isWishlisted ? "Remove" : "Save"} ${product.name}`} onClick={() => {
+          if (!user) {
+            sessionStorage.setItem("pending-wishlist-product", product.id);
+            router.push("/login?returnTo=%2Faccount");
+            return;
+          }
+          toggle(product.id);
+          setWishlistMessage(isWishlisted ? "Removed from wishlist" : "Saved to wishlist");
+          window.setTimeout(() => setWishlistMessage(""), 2200);
+        }}>
           <AnimatePresence mode="wait" initial={false}>
             <motion.span key={isWishlisted ? "saved" : "empty"} initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.6 }}>
               <Heart size={17} fill={isWishlisted ? "currentColor" : "none"} />
@@ -70,6 +85,7 @@ export default function ProductCard({ product }: { product: Product }) {
           </AnimatePresence>
           <span className="sr-only">{isWishlisted ? "Saved" : "Save"}</span>
         </motion.button>
+        {wishlistMessage ? <span className="wishlist-toast" role="status">{wishlistMessage}</span> : null}
       </div>
 
       <div className="product-body">

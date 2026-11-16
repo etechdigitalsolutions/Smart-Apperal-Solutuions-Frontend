@@ -3,7 +3,9 @@ import { Inter, Noto_Sans_Sinhala } from "next/font/google";
 import { CartProvider } from "@/hooks/useCart";
 import "@/styles/tokens.css";
 import "@/styles/globals.css";
+import "@/styles/auth-account.css";
 import { WishlistProvider } from "@/context/WishlistContext";
+import { AuthProvider } from "@/hooks/useAuth";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -37,11 +39,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${notoSansSinhala.variable}`}>
-        <CartProvider>
-          <WishlistProvider>
-            {children}
-          </WishlistProvider>
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <WishlistProvider>{children}</WishlistProvider>
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

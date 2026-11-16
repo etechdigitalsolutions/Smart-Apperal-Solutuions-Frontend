@@ -6,3 +6,5 @@ export * from "./badge";
 export * from "./card";
 export * from "./spinner";
 export * from "./toast";
+export * from "./alert";
+export * from "./avatar";

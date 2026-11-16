@@ -3,8 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { Heart } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { useCart } from "@/hooks/useCart";
+import { useAuth } from "@/hooks/useAuth";
+import { useWishlist } from "@/hooks/useWishlist";
 import { formatCurrency } from "@/lib/utils/helpers";
 import { formatKokoInstallment } from "@/lib/utils/koko";
 import type { Product } from "@/types";
@@ -13,7 +17,11 @@ export default function ProductDetailPanel({ product }: { product: Product }) {
   const [activeImage, setActiveImage] = useState(product.images[0]);
   const [quantity, setQuantity] = useState(1);
   const { addItem } = useCart();
+  const { user } = useAuth();
+  const { wishlist, toggle } = useWishlist();
+  const router = useRouter();
   const isOutOfStock = product.stockStatus === "out_of_stock";
+  const isWishlisted = wishlist.includes(product.id);
 
   return (
     <main className="page-shell">
@@ -28,7 +36,7 @@ export default function ProductDetailPanel({ product }: { product: Product }) {
             <p className="eyebrow">{product.brand} · {product.modelCode}</p>
             <h1>{product.name}</h1>
             <p className="detail-description">{product.description}</p>
-            <div className="detail-price"><strong>{formatCurrency(product.price)}</strong>{product.comparePrice ? <span className="strike">{formatCurrency(product.comparePrice)}</span> : null}</div>
+            <div className="detail-price"><strong>{formatCurrency(product.price)}</strong>{product.comparePrice ? <span className="strike">{formatCurrency(product.comparePrice)}</span> : null}<button type="button" className={`detail-wishlist ${isWishlisted ? "is-wishlisted" : ""}`} onClick={() => { if (!user) { sessionStorage.setItem("pending-wishlist-product", product.id); router.push("/login?returnTo=%2Faccount"); return; } toggle(product.id); }}><Heart size={19} fill={isWishlisted ? "currentColor" : "none"} /> {isWishlisted ? "Saved" : "Save to wishlist"}</button></div>
             
             <div className="product-installment">
               <span>{formatKokoInstallment(product.price)}</span>

@@ -12,6 +12,7 @@ import {
 interface WishlistContextType {
   wishlist: string[];
   toggle: (id: string) => void;
+  add: (id: string) => void;
   remove: (id: string) => void;
 }
 
@@ -51,12 +52,16 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
     );
   };
 
+  const add = (id: string) => {
+    setWishlist((prev) => (prev.includes(id) ? prev : [...prev, id]));
+  };
+
   const remove = (id: string) => {
     setWishlist((prev) => prev.filter((item) => item !== id));
   };
 
   return (
-    <WishlistContext.Provider value={{ wishlist, toggle, remove }}>
+    <WishlistContext.Provider value={{ wishlist, toggle, add, remove }}>
       {children}
     </WishlistContext.Provider>
   );

@@ -13,6 +13,7 @@ import { products } from "@/data/products";
 import MegaMenu, { AllCategoriesTrigger, MobileMegaMenu } from "./MegaMenu";
 import { useCart } from "@/hooks/useCart";
 import { useWishlist } from "@/hooks/useWishlist";
+import { useAuth } from "@/hooks/useAuth";
 import { formatCurrency } from "@/lib/utils/helpers";
 
 const secondaryLinks = [
@@ -27,6 +28,7 @@ const secondaryLinks = [
 export default function Header() {
   const { itemCount, subtotal } = useCart();
   const { wishlist } = useWishlist();
+  const { user } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -169,7 +171,7 @@ export default function Header() {
 
           
           <div className="header-meta">
-            <Link href="/account/wishlist" className="header-action">
+            <Link href={user ? "/account/wishlist" : "/login?returnTo=%2Faccount"} className="header-action">
               <Heart size={18} aria-hidden="true" />
               <span className="header-action-label">Wishlist</span>
               <span className="header-badge">{wishlist.length}</span>
@@ -182,7 +184,7 @@ export default function Header() {
               <strong className="header-cart-total">{formatCurrency(subtotal)}</strong>
             </Link>
 
-            <Link href="/login" className="header-action header-icon-action" aria-label="Account">
+            <Link href={user ? "/account" : "/login"} className="header-action header-icon-action" aria-label="Account">
               <UserRound size={18} />
               <span>Account</span>
             </Link>
