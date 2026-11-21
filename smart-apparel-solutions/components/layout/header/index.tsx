@@ -17,15 +17,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { formatCurrency } from "@/lib/utils/helpers";
 import { useLanguage } from "@/context/LanguageContext";
 
-const secondaryLinks = [
-  { label: "මහමු (Mahamu)", href: "/mahamu" },
-  { label: "Installments", href: "/installments" },
-  { label: "Services & Repair", href: "/services-repair" },
-  { label: "News / Blog", href: "/blog" },
-  { label: "Track Order", href: "/track-order" },
-  { label: "Contact", href: "/contact" },
-];
-
 export default function Header() {
   const { itemCount, subtotal } = useCart();
   const { wishlist } = useWishlist();
@@ -269,13 +260,10 @@ export default function Header() {
           <MobileMegaMenu openGroup={mobileCategoryOpen} onToggle={(slug) => setMobileCategoryOpen((value) => value === slug ? null : slug)} onClose={() => setMobileOpen(false)} />
           {navigation.filter((item) => item.slug === "services-support" || item.slug === "company").map((item) => (
             <div key={item.slug} className="mobile-menu-group">
-              <div className="mobile-menu-heading"><Link href={item.href ?? `/products?category=${item.slug}`} onClick={() => setMobileOpen(false)}>{item.label}</Link>{item.children?.length ? <button type="button" aria-label={`Expand ${item.label}`} aria-expanded={expandedMobile === item.slug} onClick={() => setExpandedMobile((value) => value === item.slug ? null : item.slug)}><ChevronDown size={17} /></button> : null}</div>
-              <AnimatePresence>{expandedMobile === item.slug ? <motion.div className="mobile-menu-children" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>{item.children?.map((child) => <Link key={child.slug} href={child.href ?? `/products?tag=${child.slug}`} onClick={() => setMobileOpen(false)} className="mobile-menu-subitem">{child.label}</Link>)}</motion.div> : null}</AnimatePresence>
+              <div className="mobile-menu-heading"><Link href={item.href ?? `/products?category=${item.slug}`} onClick={() => setMobileOpen(false)}>{translate(item.label)}</Link>{item.children?.length ? <button type="button" aria-label={`Expand ${item.label}`} aria-expanded={expandedMobile === item.slug} onClick={() => setExpandedMobile((value) => value === item.slug ? null : item.slug)}><ChevronDown size={17} /></button> : null}</div>
+              <AnimatePresence>{expandedMobile === item.slug ? <motion.div className="mobile-menu-children" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>{item.children?.map((child) => <Link key={child.slug} href={child.href ?? `/products?tag=${child.slug}`} onClick={() => setMobileOpen(false)} className="mobile-menu-subitem">{translate(child.label)}</Link>)}</motion.div> : null}</AnimatePresence>
             </div>
           ))}
-          <div className="mobile-menu-secondary">
-            {secondaryLinks.map((link) => <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}>{link.label}</Link>)}
-          </div>
           </motion.div>
         </>
       ) : null}
