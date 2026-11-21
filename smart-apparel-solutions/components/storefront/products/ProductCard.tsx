@@ -28,6 +28,9 @@ export default function ProductCard({ product }: { product: Product }) {
   product.comparePrice && product.comparePrice > product.price
     ? product.comparePrice - product.price
     : 0;
+  const discountPercent = savings > 0 && product.comparePrice
+    ? Math.round((savings / product.comparePrice) * 100)
+    : 0;
 
   const kokoUrl = `https://paykoko.com/customer-education?Amount=${(product.price / 3).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
@@ -57,7 +60,7 @@ export default function ProductCard({ product }: { product: Product }) {
         <div className="product-badges">
           {savings > 0 && (
             <span className="badge-off">
-              <Tag size={14} /> {formatCurrency(savings)} off
+              <Tag size={14} /> {discountPercent}% off · Save {formatCurrency(savings)}
             </span>
           )}
           {labelBadges.map((badge) => (
@@ -94,10 +97,10 @@ export default function ProductCard({ product }: { product: Product }) {
 
         <div className="product-pricing">
           <strong>{formatCurrency(product.price)}</strong>
-          {product.comparePrice ? <span className="strike">{formatCurrency(product.comparePrice)}</span> : null}
+          {product.comparePrice && product.comparePrice > product.price ? <span className="strike">{formatCurrency(product.comparePrice)}</span> : null}
         </div>
 
-        
+        {product.installment ? (
           <div className="product-installment">
             <span>{formatKokoInstallment(product.price)}</span>
 
@@ -127,6 +130,7 @@ export default function ProductCard({ product }: { product: Product }) {
               <span className="koko-info-icon" aria-hidden="true">i</span>
             </a>
           </div>
+        ) : null}
 
 
         {isUnavailable ? (

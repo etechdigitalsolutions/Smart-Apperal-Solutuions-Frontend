@@ -1,5 +1,9 @@
+"use client";
 
 import Link from "next/link";
+import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { createReference, saveInquiry } from "@/lib/utils/inquiries";
 import {
   Wrench,
   Settings2,
@@ -45,6 +49,58 @@ const services = [
 ];
 
 export default function ServicesRepairPage() {
+  const { user } = useAuth();
+  const [images, setImages] = useState<string[]>([]);
+  const [imageError, setImageError] = useState("");
+  const [submittedReference, setSubmittedReference] = useState("");
+
+  function handleImages(event: ChangeEvent<HTMLInputElement>) {
+    setImageError("");
+    const files = Array.from(event.target.files ?? []);
+    if (files.length + images.length > 5) {
+      setImageError("You can upload up to 5 images.");
+      return;
+    }
+    files.forEach((file) => {
+      if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+        setImageError("Only JPG, JPEG, PNG and WEBP files are supported.");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        setImageError("Each image must be 5 MB or smaller.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === "string") setImages((current) => [...current, reader.result as string]);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const reference = createReference("INQ");
+    saveInquiry({
+      id: crypto.randomUUID(),
+      reference,
+      type: "Service & Repair",
+      name: String(data.get("name") || user?.name || ""),
+      email: String(data.get("email") || user?.email || ""),
+      phone: String(data.get("phone") || ""),
+      message: String(data.get("message") || ""),
+      status: "Pending",
+      images,
+      userId: user?.id,
+      createdAt: new Date().toISOString(),
+    });
+    form.reset();
+    setImages([]);
+    setSubmittedReference(reference);
+  }
+
   return (
     <main className="page-shell services-page">
       <div className="container">
@@ -74,7 +130,7 @@ export default function ServicesRepairPage() {
                 Contact Support <ArrowRight size={17} />
               </Link>
               <span className="services-response-note">
-                We're here to help your workshop.
+                We&apos;re here to help your workshop.
               </span>
             </div>
           </div>
@@ -131,6 +187,47 @@ export default function ServicesRepairPage() {
               );
             })}
           </div>
+        </section>
+
+        <section className="services-inquiry-section">
+          <div className="services-section-heading">
+            <div>
+              <p className="eyebrow">REQUEST ASSISTANCE</p>
+              <h2>Submit a Service or Repair Inquiry</h2>
+              <p>Guest submissions are welcome. Add photos to help our technicians understand the issue.</p>
+            </div>
+          </div>
+          <form className="services-inquiry-form page-card" onSubmit={handleSubmit}>
+            <div className="form-grid">
+              <label>Name<input required name="name" defaultValue={user?.name ?? ""} placeholder="Your name" /></label>
+              <label>Phone<input required name="phone" type="tel" placeholder="07x xxx xxxx" /></label>
+              <label className="form-span-two">Email<input required name="email" type="email" defaultValue={user?.email ?? ""} placeholder="you@example.com" /></label>
+              <label className="form-span-two">Describe the issue<textarea required name="message" rows={5} placeholder="Machine model, symptoms and preferred support" /></label>
+            </div>
+            <label className="inquiry-upload">
+              <strong>Upload images</strong>
+              <span>JPG, PNG or WEBP, up to 5 MB each</span>
+              <input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={handleImages} />
+            </label>
+            {imageError ? <p className="form-error-text" role="alert">{imageError}</p> : null}
+            {images.length ? (
+              <div className="inquiry-previews">
+                {images.map((image, index) => (
+                  <div key={`${index}-${image.slice(-12)}`}>
+                    {/* eslint-disable-next-next-line @next/next/no-img-element */}
+                    <img src={image} alt={`Upload preview ${index + 1}`} />
+                    <button type="button" onClick={() => setImages((current) => current.filter((_, itemIndex) => itemIndex !== index))}>Remove</button>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+            <button type="submit" className="btn btn-primary">Submit inquiry</button>
+            {submittedReference ? (
+              <div className="form-feedback form-success" role="status">
+                Inquiry submitted successfully. Your reference number is <strong>{submittedReference}</strong>.
+              </div>
+            ) : null}
+          </form>
         </section>
 
         <section className="services-bottom-cta">

@@ -10,7 +10,7 @@ const config = {
   whatsappUrl: "https://wa.me/94712061850",
   tagline: "හැඩට වැඩට ස්මාට් විසඳුමක්",
   email: "sales@smartapparelsolutions.lk",
-  address: "No. 125, Galle Road, Colombo 03, Sri Lanka",
+  address: "248 Pamunuwa Road, Maharagama, Sri Lanka",
   announcement:
     "Island-wide delivery · 3× installments with Koko · Call 071 206 1850",
   features: {

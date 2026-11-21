@@ -126,3 +126,30 @@ export interface PaginatedResponse<T> extends ApiResponse<T[]> {
   perPage: number;
   totalPages: number;
 }
+
+export interface Inquiry {
+  id: string;
+  reference: string;
+  type: "Service & Repair" | "General" | "Quotation";
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  status: "Pending" | "In Progress" | "Completed" | "Rejected";
+  images: string[];
+  userId?: string;
+  createdAt: string;
+}
+
+export interface Quotation {
+  id: string;
+  reference: string;
+  name: string;
+  email: string;
+  phone: string;
+  items: { productId: string; name: string; quantity: number; price: number }[];
+  notes: string;
+  status: "Pending" | "In Progress" | "Completed" | "Rejected";
+  userId?: string;
+  createdAt: string;
+}

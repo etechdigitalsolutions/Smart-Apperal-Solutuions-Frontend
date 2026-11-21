@@ -99,7 +99,7 @@ export default function ContactPage() {
 
             {status === "error" && (
               <div className="form-feedback form-error" role="alert">
-                We couldn't submit your inquiry. Please try again.
+                We couldn&apos;t submit your inquiry. Please try again.
               </div>
             )}
           </form>

@@ -1,5 +1,6 @@
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import MobileBottomNav from "@/components/layout/MobileBottomNav";
 
 export default function StorefrontLayout({
   children,
@@ -11,6 +12,7 @@ export default function StorefrontLayout({
       <Header />
       <main className="main-content">{children}</main>
       <Footer />
+      <MobileBottomNav />
     </div>
   );
 }

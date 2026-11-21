@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { Camera, Check, UserRound } from "lucide-react";
 import AccountPanel from "@/components/account/AccountPanel";
 import { useAuth } from "@/hooks/useAuth";
@@ -10,23 +10,18 @@ const AVATAR_KEY = "profile-avatar";
 
 export default function ProfilePage() {
   const { user } = useAuth();
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("+94 71 206 1850");
-  const [avatar, setAvatar] = useState<string | null>(null);
+  const [name, setName] = useState(() =>
+    typeof window === "undefined" ? user?.name ?? "Nimal Perera" : localStorage.getItem("profile-name") || user?.name || "Nimal Perera"
+  );
+  const [phone, setPhone] = useState(() =>
+    typeof window === "undefined" ? "+94 71 206 1850" : localStorage.getItem("profile-phone") || "+94 71 206 1850"
+  );
+  const [avatar, setAvatar] = useState<string | null>(() =>
+    typeof window === "undefined" ? null : localStorage.getItem(AVATAR_KEY)
+  );
   const [saved, setSaved] = useState(false);
-  const [initialName, setInitialName] = useState("");
-  const [initialPhone, setInitialPhone] = useState("+94 71 206 1850");
-
-  useEffect(() => {
-    const storedName = localStorage.getItem("profile-name") || user?.name || "Nimal Perera";
-    const storedPhone = localStorage.getItem("profile-phone") || "+94 71 206 1850";
-    const storedAvatar = localStorage.getItem(AVATAR_KEY);
-    setName(storedName);
-    setPhone(storedPhone);
-    setInitialName(storedName);
-    setInitialPhone(storedPhone);
-    if (storedAvatar) setAvatar(storedAvatar);
-  }, [user?.name]);
+  const [initialName, setInitialName] = useState(name);
+  const [initialPhone, setInitialPhone] = useState(phone);
 
   function save(event: FormEvent) {
     event.preventDefault();
@@ -45,12 +40,19 @@ export default function ProfilePage() {
   }
 
   function onAvatarChange(file: File | null) {
-    if (!file || !file.type.startsWith("image/")) return;
+    if (!file) return;
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) return;
+    if (file.size > 5 * 1024 * 1024) return;
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === "string") setAvatar(reader.result);
     };
     reader.readAsDataURL(file);
+  }
+
+  function removeAvatar() {
+    setAvatar(null);
+    localStorage.removeItem(AVATAR_KEY);
   }
 
   const dirty = name !== initialName || phone !== initialPhone;
@@ -80,6 +82,11 @@ export default function ProfilePage() {
                 onChange={(event) => onAvatarChange(event.target.files?.[0] ?? null)}
               />
             </label>
+            {avatar ? (
+              <button type="button" className="profile-avatar-remove" onClick={removeAvatar}>
+                Remove photo
+              </button>
+            ) : null}
           </div>
           <div>
             <h2>Personal information</h2>

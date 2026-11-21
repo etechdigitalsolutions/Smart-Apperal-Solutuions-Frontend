@@ -34,6 +34,8 @@ export interface CheckoutFormData {
   country: string;
   // New
   createAccount: boolean;
+  password: string;
+  confirmPassword: string;
   billingSameAsShipping: boolean;
   billing: AddressData | null; // billing address (always set for pickup)
   pickupLocation: string; // "" when shipping
@@ -62,7 +64,7 @@ const CITIES = [
 
 const PICKUP_LOCATION = {
   name: "Smart Apparel Solutions",
-  address: "No.248, Pamunuwa Rd, Maharagama, Colombo, 10250",
+  address: "248 Pamunuwa Road, Maharagama, Sri Lanka",
 };
 
 const CARD_PAYMENT = "Visa / MasterCard";
@@ -186,6 +188,8 @@ export default function CheckoutForm({
   const [delivery, setDeliveryState] = useState<DeliveryMethod>("ship");
   const [email, setEmail] = useState("");
   const [createAccount, setCreateAccount] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const [address, setAddress] = useState<AddressData>(EMPTY_ADDRESS); // shipping (or billing when pickup)
   const [billing, setBilling] = useState<AddressData>(EMPTY_ADDRESS); // only used if "same as shipping" is off
@@ -227,6 +231,7 @@ export default function CheckoutForm({
     // Reject submissions that fill the honeypot.
     if (website.trim() !== "") return;
     if (items.length === 0 || isSubmitting) return;
+    if (createAccount && (password.length < 8 || password !== confirmPassword)) return;
 
     const clean = (a: AddressData): AddressData => ({
       country: a.country.trim(),
@@ -263,6 +268,8 @@ export default function CheckoutForm({
       postalCode: isPickup ? "" : main.postalCode,
       country: main.country,
       createAccount,
+      password,
+      confirmPassword,
       billingSameAsShipping: isPickup ? false : sameBilling,
       billing: billingData,
       pickupLocation: isPickup ? PICKUP_LOCATION.name : "",
@@ -309,14 +316,52 @@ export default function CheckoutForm({
       </label>
       <p className="co-hint">You are currently checking out as a guest.</p>
 
-      <label className="co-check">
-        <input
-          type="checkbox"
-          checked={createAccount}
-          onChange={(e) => setCreateAccount(e.target.checked)}
-        />
-        Create an account with Smart Apparel Solutions
-      </label>
+      <div className={`co-account-create${createAccount ? " is-active" : ""}`}>
+        <label className="co-check">
+          <input
+            type="checkbox"
+            checked={createAccount}
+            onChange={(e) => setCreateAccount(e.target.checked)}
+          />
+          <span>
+            <strong>Create an account</strong>
+            <small>Track orders, view inquiries and manage your personal details.</small>
+          </span>
+        </label>
+        {createAccount ? (
+          <div className="co-grid co-account-fields">
+            <label className="co-field">
+              <input
+                required
+                type="password"
+                name="password"
+                minLength={8}
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                placeholder=" "
+                autoComplete="new-password"
+              />
+              <span>Password</span>
+            </label>
+            <label className="co-field">
+              <input
+                required
+                type="password"
+                name="confirmPassword"
+                minLength={8}
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
+                placeholder=" "
+                autoComplete="new-password"
+              />
+              <span>Confirm password</span>
+            </label>
+            {confirmPassword && password !== confirmPassword ? (
+              <p className="co-span-2 co-account-error">Passwords do not match.</p>
+            ) : null}
+          </div>
+        ) : null}
+      </div>
 
       {/* ---------- Delivery ---------- */}
       <h2 className="co-heading">Delivery</h2>

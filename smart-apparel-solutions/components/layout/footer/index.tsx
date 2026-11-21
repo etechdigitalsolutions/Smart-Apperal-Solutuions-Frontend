@@ -1,7 +1,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ArrowUp, Mail, MapPin, Phone, Clock3 } from "lucide-react";
+import { ArrowRight, ArrowUp, Mail, MapPin, Phone, Clock3, Music2 } from "lucide-react";
 
 import config from "@/config";
 
@@ -109,6 +109,11 @@ export default function Footer() {
               <Link href="https://www.instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
                 <Image src="/images/social/instagram.png" alt="" width={18} height={18} />
               </Link>
+              {process.env.NEXT_PUBLIC_TIKTOK_URL ? (
+                <Link href={process.env.NEXT_PUBLIC_TIKTOK_URL} target="_blank" rel="noreferrer" aria-label="TikTok">
+                  <Music2 size={18} aria-hidden="true" />
+                </Link>
+              ) : null}
             </div>
           </div>
         </div>

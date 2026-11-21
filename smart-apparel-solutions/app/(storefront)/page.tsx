@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import ProductCard from "@/components/storefront/products/ProductCard";
 import HeroSlideshow from "@/components/storefront/home/HeroSlideshow";
 import WhatDoYouSew from "@/components/storefront/home/WhatDoYouSew";
 import { categories } from "@/data/categories";
@@ -65,7 +64,6 @@ const brandLogos = [
 ];
 
 export default function HomePage() {
-  const featureProducts = products.slice(0, 4);
   const collections = categories.filter((category) => categoryImages[category.slug]).slice(0, 5);
 
   return (
@@ -95,6 +93,16 @@ export default function HomePage() {
       <section className="trust-strip">
         <div className="container trust-strip-inner">
           <span>Genuine brands</span><span>Island-wide delivery</span><span>Technician support</span><span>Koko 3× installments</span>
+        </div>
+      </section>
+
+      <section className="container">
+        <div className="special-discount-banner" role="region" aria-label="Special discounts">
+          <div>
+            <p>Lowest Price Guaranteed</p>
+            <strong>Special discounts available</strong>
+          </div>
+          <span>අඩුම මිල – Guaranteed!</span>
         </div>
       </section>
 
@@ -143,6 +151,29 @@ export default function HomePage() {
       
       {/* Product customization - What do you sew? */}
       <WhatDoYouSew />
+
+      <section className="section production-process-section">
+        <div className="container">
+          <div className="section-intro">
+            <div><p className="eyebrow">Production process</p><h2>What Are We Making?</h2></div>
+            <p>From prepared fabric to a finished product, our process keeps every production stage clear and controlled.</p>
+          </div>
+          <div className="production-timeline">
+            {[
+              { number: "01", title: "Cutting and Preparation", icon: Scissors },
+              { number: "02", title: "Embroidery and Detail", icon: Flower2 },
+              { number: "03", title: "Sewing and Construction", icon: Shirt },
+              { number: "04", title: "Finishing and Pressing", icon: Sparkles },
+            ].map(({ number, title, icon: Icon }) => (
+              <article className="production-step" key={title}>
+                <span className="production-number">{number}</span>
+                <span className="production-icon"><Icon size={25} /></span>
+                <h3>{title}</h3>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="section home-section home-dashboard-section">
         <div className="container">
@@ -229,7 +260,7 @@ export default function HomePage() {
       </section>
 
       <section className="section service-callout">
-        <div className="container service-callout-inner"><div><p className="eyebrow">More than a machine</p><h2>Keep production moving.</h2><p>Need a recommendation, installation, or a part that keeps a familiar machine running? Our team knows the work behind the work.</p></div><div className="service-actions"><Link href="/services-repair" className="btn btn-primary">Service & repair</Link><Link href="/contact" className="btn btn-light">Get a quotation</Link></div></div>
+      <div className="container service-callout-inner"><div><p className="eyebrow">More than a machine</p><h2>Keep production moving.</h2><p>Need a recommendation, installation, or a part that keeps a familiar machine running? Our team knows the work behind the work.</p></div><div className="service-actions"><Link href="/services-repair" className="btn btn-primary">Service & repair</Link><Link href="/quotations" className="btn btn-light">Get a quotation</Link></div></div>
       </section>
 
       <section className="section home-section brand-section">

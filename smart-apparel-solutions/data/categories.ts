@@ -6,6 +6,7 @@ export const categories: Category[] = [
     name: "Sewing Machines",
     slug: "sewing-machines",
     description: "Single needle, overlock, interlock and heavy-duty industrial machines.",
+    image: "/images/products/jack_f5.jpg",
     children: [
       { id: "budget-series", name: "Budget Series", slug: "budget-series", parentSlug: "sewing-machines" },
       { id: "automated", name: "Automated", slug: "automated", parentSlug: "sewing-machines" },
@@ -20,6 +21,7 @@ export const categories: Category[] = [
     name: "Cutting",
     slug: "cutting",
     description: "Cutting tables, knives and precision cutting systems.",
+    image: "/images/products/GOLDEN_EAGLE.jpg",
     children: [
       { id: "cloth-cutting", name: "Cloth Cutting", slug: "cloth-cutting", parentSlug: "cutting" },
       { id: "fabric-cutting", name: "Fabric Cutting", slug: "fabric-cutting", parentSlug: "cutting" },
@@ -30,6 +32,7 @@ export const categories: Category[] = [
     name: "Ironing & Finishing",
     slug: "ironing-finishing",
     description: "Pressing, steam and finishing equipment for production lines.",
+    image: "/images/products/Iron-Steam.jpg",
     children: [
       { id: "ironing-boilers", name: "Ironing & Boilers", slug: "ironing-boilers", parentSlug: "ironing-finishing" },
       { id: "heat-transfer", name: "Heat Transfer", slug: "heat-transfer", parentSlug: "ironing-finishing" },
@@ -43,6 +46,7 @@ export const categories: Category[] = [
     name: "Embroidery",
     slug: "embroidery",
     description: "Computer and multi-needle embroidery systems.",
+    image: "/images/products/golden-eagle.png",
     children: [
       { id: "multi-needle", name: "Multi-Needle", slug: "multi-needle", parentSlug: "embroidery" },
       { id: "pattern-sewing", name: "Pattern Sewing", slug: "pattern-sewing", parentSlug: "embroidery" },

@@ -11,6 +11,8 @@ import {
   Package,
   Settings,
   UserRound,
+  ClipboardList,
+  ReceiptText,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Avatar } from "@/components/ui/avatar";
@@ -26,6 +28,8 @@ const navigation = [
   { label: "Overview", href: "/account", icon: LayoutDashboard },
   { label: "My Profile", href: "/account/profile", icon: UserRound },
   { label: "My Orders", href: "/account/orders", icon: Package },
+  { label: "My Inquiries", href: "/account/inquiries", icon: ClipboardList },
+  { label: "My Quotations", href: "/account/quotations", icon: ReceiptText },
   { label: "My Wishlist", href: "/account/wishlist", icon: Heart },
   { label: "Saved Addresses", href: "/account/addresses", icon: MapPin },
   { label: "Account Settings", href: "/account/settings", icon: Settings },
@@ -41,6 +45,9 @@ export default function AccountPanel({ title, description, children }: AccountPa
   const router = useRouter();
   const { user, logout, isHydrated } = useAuth();
   const [confirmLogout, setConfirmLogout] = useState(false);
+  const [avatar] = useState<string | null>(() =>
+    typeof window === "undefined" ? null : localStorage.getItem("profile-avatar")
+  );
 
   useEffect(() => {
     if (isHydrated && !user) router.replace("/login?returnTo=%2Faccount");
@@ -74,7 +81,7 @@ export default function AccountPanel({ title, description, children }: AccountPa
           </Link>
 
           <div className="account-user">
-            <Avatar name={user.name} />
+            <Avatar name={user.name} src={avatar} />
             <div>
               <strong>{user.name}</strong>
               <span>{user.email}</span>

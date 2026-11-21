@@ -15,6 +15,7 @@ import { useCart } from "@/hooks/useCart";
 import { useWishlist } from "@/hooks/useWishlist";
 import { useAuth } from "@/hooks/useAuth";
 import { formatCurrency } from "@/lib/utils/helpers";
+import { useLanguage } from "@/context/LanguageContext";
 
 const secondaryLinks = [
   { label: "මහමු (Mahamu)", href: "/mahamu" },
@@ -29,6 +30,7 @@ export default function Header() {
   const { itemCount, subtotal } = useCart();
   const { wishlist } = useWishlist();
   const { user } = useAuth();
+  const { language, setLanguage } = useLanguage();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -171,6 +173,13 @@ export default function Header() {
 
           
           <div className="header-meta">
+            <label className="language-select" aria-label="Language">
+              <select value={language} onChange={(event) => setLanguage(event.target.value as "en" | "si" | "ta")}>
+                <option value="en">EN</option>
+                <option value="si">සිං</option>
+                <option value="ta">தமிழ்</option>
+              </select>
+            </label>
             <Link href={user ? "/account/wishlist" : "/login?returnTo=%2Faccount"} className="header-action">
               <Heart size={18} aria-hidden="true" />
               <span className="header-action-label">Wishlist</span>
