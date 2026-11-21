@@ -1,3 +1,2 @@
-export default function RegisterPage() {
-  return <div>Register Page</div>;
-}
+import AuthPanel from "@/components/auth/AuthPanel";
+export default function RegisterPage() { return <AuthPanel mode="register" />; }

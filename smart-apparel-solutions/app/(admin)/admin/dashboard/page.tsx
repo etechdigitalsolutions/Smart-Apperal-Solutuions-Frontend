@@ -1,3 +1,3 @@
-export default function AdminDashboardPage() {
-  return <div>Admin Dashboard</div>;
-}
+import Link from "next/link";
+import AdminPanel from "@/components/admin/AdminPanel";
+export default function AdminDashboardPage() { return <AdminPanel title="Operations dashboard" description="A quick view of catalogue health, quotation activity and service workload."><div className="admin-stat-grid"><div className="page-card"><strong>18</strong><span>Active products</span></div><div className="page-card"><strong>12</strong><span>Open quotations</span></div><div className="page-card"><strong>7</strong><span>Low-stock items</span></div><div className="page-card"><strong>4.9/5</strong><span>Customer rating</span></div></div><div className="admin-two-column"><div className="page-card"><h2>Today&apos;s priorities</h2><p>Follow up on three machine quotations and confirm the next delivery run.</p><Link href="/admin/orders" className="link-arrow">Open orders</Link></div><div className="page-card"><h2>Catalogue health</h2><p>Review stock for overlock and finishing equipment before the next campaign.</p><Link href="/admin/inventory" className="link-arrow">Review inventory</Link></div></div></AdminPanel>; }

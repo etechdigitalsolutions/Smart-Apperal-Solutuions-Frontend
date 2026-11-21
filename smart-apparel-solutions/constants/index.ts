@@ -1,7 +1,8 @@
 // App-wide constants
 
 export const APP_NAME = "Smart Apparel Solutions";
-export const APP_DESCRIPTION = "Premium apparel for every occasion";
+export const APP_DESCRIPTION =
+  "Industrial sewing, cutting & finishing machines, spare parts and accessories in Sri Lanka";
 
 export const ROUTES = {
   HOME: "/",
@@ -16,6 +17,10 @@ export const ROUTES = {
   REGISTER: "/register",
   DASHBOARD: "/dashboard",
   ADMIN: "/admin/dashboard",
+  MAHAMU: "/mahamu",
+  INSTALLMENTS: "/installments",
+  SERVICES_REPAIR: "/services-repair",
+  TRACK_ORDER: "/track-order",
 } as const;
 
 export const ORDER_STATUSES = [

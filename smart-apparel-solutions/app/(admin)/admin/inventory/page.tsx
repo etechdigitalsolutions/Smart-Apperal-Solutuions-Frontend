@@ -1,3 +1,3 @@
-export default function InventoryPage() {
-  return <div>Inventory Page</div>;
-}
+import AdminPanel from "@/components/admin/AdminPanel";
+import { products } from "@/data/products";
+export default function InventoryPage() { return <AdminPanel title="Inventory" description="Monitor stock states and prioritise replenishment."><div className="page-card admin-table"><div className="admin-table-row admin-table-head"><span>Product</span><span>SKU</span><span>Stock</span><span>Status</span></div>{products.map((product) => <div className="admin-table-row" key={product.id}><span>{product.name}</span><span>{product.sku}</span><span>{product.stock}</span><span>{product.stockStatus}</span></div>)}</div></AdminPanel>; }

@@ -1,3 +1,3 @@
-export default function AdminUsersPage() {
-  return <div>Admin Users</div>;
-}
+import Link from "next/link";
+import AdminPanel from "@/components/admin/AdminPanel";
+export default function AdminUsersPage() { return <AdminPanel title="Customers" description="Review customer accounts and support conversations."><div className="page-card admin-table"><div className="admin-table-row admin-table-head"><span>Name</span><span>Email</span><span>Role</span><span>Action</span></div>{[["Nimal Perera", "nimal@example.com", "Customer", "u-001"], ["Maya Fernando", "maya@example.com", "Customer", "u-002"], ["Admin team", "sales@smartapparelsolutions.lk", "Admin", "u-003"]].map(([name, email, role, id]) => <div className="admin-table-row" key={id}><span>{name}</span><span>{email}</span><span>{role}</span><span><Link href={`/admin/users/${id}`} className="link-arrow">View</Link></span></div>)}</div></AdminPanel>; }

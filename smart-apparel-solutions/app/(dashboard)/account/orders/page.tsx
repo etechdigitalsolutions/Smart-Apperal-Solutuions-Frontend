@@ -1,3 +1,5 @@
-export default function OrdersPage() {
-  return <div>Orders Page</div>;
-}
+import Link from "next/link";
+import { ArrowUpRight, Package } from "lucide-react";
+import AccountPanel from "@/components/account/AccountPanel";
+const orders = [{ id: "SAS-2026-001", date: "12 Nov 2026", products: "JACK F5 Lockstitch Machine · 2 items", total: "රු 240,600", status: "Processing", tone: "processing" }, { id: "SAS-2025-018", date: "04 Oct 2025", products: "JUKI Overlock Knife Set", total: "රු 5,400", status: "Delivered", tone: "delivered" }, { id: "SAS-2025-011", date: "18 Aug 2025", products: "Silverstar Steam Bottle Iron", total: "රු 11,800", status: "Shipped", tone: "shipped" }];
+export default function OrdersPage() { return <AccountPanel title="My orders" description="Track quotations, deliveries and your complete order history."><div className="orders-list">{orders.map((order) => <article className="order-card" key={order.id}><div className="order-card-icon"><Package size={20} /></div><div className="order-card-main"><div className="order-card-top"><strong>{order.id}</strong><span className={`status-pill ${order.tone}`}>{order.status}</span></div><p>{order.products}</p><small>Placed {order.date}</small></div><div className="order-total"><small>Total amount</small><strong>{order.total}</strong><Link href={`/account/orders/${order.id}`}>Details <ArrowUpRight size={14} /></Link></div></article>)}</div></AccountPanel>; }

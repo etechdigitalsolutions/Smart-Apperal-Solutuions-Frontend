@@ -1,15 +1,17 @@
 // Auth store - global auth state
 
+import type { User } from "@/types";
+
 export interface AuthState {
-  user: any | null;
+  user: User | null;
   token: string | null;
   isAuthenticated: boolean;
 }
 
 export type AuthAction =
-  | { type: "LOGIN"; payload: { user: any; token: string } }
+  | { type: "LOGIN"; payload: { user: User; token: string } }
   | { type: "LOGOUT" }
-  | { type: "UPDATE_USER"; payload: any };
+  | { type: "UPDATE_USER"; payload: User };
 
 export const initialAuthState: AuthState = {
   user: null,

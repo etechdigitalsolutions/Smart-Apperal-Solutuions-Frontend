@@ -1,4 +1,2 @@
-// Data table component for admin
-export default function DataTable() {
-  return <table>Data Table</table>;
-}
+interface DataTableProps { headers?: string[]; rows?: string[][]; }
+export default function DataTable({ headers = [], rows = [] }: DataTableProps) { return <div className="page-card admin-table"><div className="admin-table-row admin-table-head">{headers.map((header) => <span key={header}>{header}</span>)}</div>{rows.map((row, index) => <div className="admin-table-row" key={`${row[0] ?? "row"}-${index}`}>{row.map((cell, cellIndex) => <span key={`${cell}-${cellIndex}`}>{cell}</span>)}</div>)}</div>; }

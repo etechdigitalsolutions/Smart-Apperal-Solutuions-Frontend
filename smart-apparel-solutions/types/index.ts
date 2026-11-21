@@ -18,16 +18,37 @@ export interface Product {
   comparePrice?: number;
   images: string[];
   category: string;
+  condition: "brand_new" | "used";
   tags: string[];
+  brand: string;
+  modelCode: string;
+  badges: string[];
+  specs: Record<string, string>;
+  stockStatus: "in_stock" | "out_of_stock" | "pre_order";
   stock: number;
   sku: string;
   createdAt: string;
+  installment?: {
+    months: number;
+    perMonth: number;
+    provider: "Koko";
+  };
+}
+
+export interface Brand {
+  id: string;
+  name: string;
+  slug: string;
+  logo?: string;
+  description?: string;
 }
 
 export interface Category {
   id: string;
   name: string;
   slug: string;
+  parentSlug?: string;
+  children?: Category[];
   image?: string;
   description?: string;
 }
@@ -49,6 +70,26 @@ export interface Order {
   shippingAddress: Address;
   createdAt: string;
 }
+
+
+export interface TrackingOrder {
+  reference: string;
+  customerName: string;
+  email: string;
+  phone: string;
+  items: CartItem[];
+  subtotal: number;
+  promoCode?: string;
+  discount: number;
+  total: number;
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+  delivery: "ship" | "pickup";
+  createdAt: string;
+  trackingNumber?: string;
+  trackingMessage: string;
+}
+
+
 
 export interface Address {
   fullName: string;
@@ -84,4 +125,31 @@ export interface PaginatedResponse<T> extends ApiResponse<T[]> {
   page: number;
   perPage: number;
   totalPages: number;
+}
+
+export interface Inquiry {
+  id: string;
+  reference: string;
+  type: "Service & Repair" | "General" | "Quotation";
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  status: "Pending" | "In Progress" | "Completed" | "Rejected";
+  images: string[];
+  userId?: string;
+  createdAt: string;
+}
+
+export interface Quotation {
+  id: string;
+  reference: string;
+  name: string;
+  email: string;
+  phone: string;
+  items: { productId: string; name: string; quantity: number; price: number }[];
+  notes: string;
+  status: "Pending" | "In Progress" | "Completed" | "Rejected";
+  userId?: string;
+  createdAt: string;
 }
