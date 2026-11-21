@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Camera, Check, UserRound } from "lucide-react";
 import AccountPanel from "@/components/account/AccountPanel";
 import { useAuth } from "@/hooks/useAuth";
@@ -10,18 +10,26 @@ const AVATAR_KEY = "profile-avatar";
 
 export default function ProfilePage() {
   const { user } = useAuth();
-  const [name, setName] = useState(() =>
-    typeof window === "undefined" ? user?.name ?? "Nimal Perera" : localStorage.getItem("profile-name") || user?.name || "Nimal Perera"
-  );
-  const [phone, setPhone] = useState(() =>
-    typeof window === "undefined" ? "+94 71 206 1850" : localStorage.getItem("profile-phone") || "+94 71 206 1850"
-  );
-  const [avatar, setAvatar] = useState<string | null>(() =>
-    typeof window === "undefined" ? null : localStorage.getItem(AVATAR_KEY)
-  );
+  const [name, setName] = useState(user?.name ?? "Nimal Perera");
+  const [phone, setPhone] = useState("+94 71 206 1850");
+  const [avatar, setAvatar] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
-  const [initialName, setInitialName] = useState(name);
+  const [initialName, setInitialName] = useState(user?.name ?? "Nimal Perera");
   const [initialPhone, setInitialPhone] = useState(phone);
+
+  useEffect(() => {
+    const storedName = localStorage.getItem("profile-name") || user?.name || "Nimal Perera";
+    const storedPhone = localStorage.getItem("profile-phone") || "+94 71 206 1850";
+    const storedAvatar = localStorage.getItem(AVATAR_KEY);
+    const frame = window.requestAnimationFrame(() => {
+      setName(storedName);
+      setPhone(storedPhone);
+      setInitialName(storedName);
+      setInitialPhone(storedPhone);
+      setAvatar(storedAvatar);
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [user?.name]);
 
   function save(event: FormEvent) {
     event.preventDefault();

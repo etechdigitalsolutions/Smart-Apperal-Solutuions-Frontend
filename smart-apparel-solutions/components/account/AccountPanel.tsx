@@ -45,9 +45,14 @@ export default function AccountPanel({ title, description, children }: AccountPa
   const router = useRouter();
   const { user, logout, isHydrated } = useAuth();
   const [confirmLogout, setConfirmLogout] = useState(false);
-  const [avatar] = useState<string | null>(() =>
-    typeof window === "undefined" ? null : localStorage.getItem("profile-avatar")
-  );
+  const [avatar, setAvatar] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedAvatar = localStorage.getItem("profile-avatar");
+    if (storedAvatar) {
+      setAvatar(storedAvatar);
+    }
+  }, []);
 
   useEffect(() => {
     if (isHydrated && !user) router.replace("/login?returnTo=%2Faccount");

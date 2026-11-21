@@ -7,6 +7,7 @@ import "@/styles/auth-account.css";
 import { WishlistProvider } from "@/context/WishlistContext";
 import { AuthProvider } from "@/hooks/useAuth";
 import { LanguageProvider } from "@/context/LanguageContext";
+import MobileBottomNav from "@/components/layout/MobileBottomNav";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -43,7 +44,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <LanguageProvider>
           <AuthProvider>
             <CartProvider>
-              <WishlistProvider>{children}</WishlistProvider>
+              <WishlistProvider>
+                {children}
+                <MobileBottomNav />
+              </WishlistProvider>
             </CartProvider>
           </AuthProvider>
         </LanguageProvider>

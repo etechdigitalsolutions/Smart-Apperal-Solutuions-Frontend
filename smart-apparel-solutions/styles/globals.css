@@ -6492,13 +6492,13 @@ body .auth-field-input {
 /* Mobile bottom navigation */
 .mobile-bottom-nav { display: none; }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
   .mobile-bottom-nav {
-    display: grid;
+    display: grid !important;
     grid-template-columns: repeat(5, 1fr);
     position: fixed;
-    z-index: 70;
+    z-index: 1000;
     left: 0;
     right: 0;
     bottom: 0;
@@ -6507,6 +6507,9 @@ body .auth-field-input {
     background: rgba(255,255,255,.98);
     border-top: 1px solid var(--color-border);
     box-shadow: 0 -8px 24px rgba(11,31,58,.10);
+    transform: translateZ(0);
+    visibility: visible;
+    opacity: 1;
   }
   .mobile-bottom-nav a {
     display: flex;

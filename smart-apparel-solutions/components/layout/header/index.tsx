@@ -30,7 +30,7 @@ export default function Header() {
   const { itemCount, subtotal } = useCart();
   const { wishlist } = useWishlist();
   const { user } = useAuth();
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, translate } = useLanguage();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -44,12 +44,15 @@ export default function Header() {
   const pathname = usePathname();
   useEffect(() => {
   // Close all navigation menus after navigating to another page.
-  setOpenNav(null);
-  setAllCategoriesOpen(false);
-  setMobileOpen(false);
-  setMobileCategoryOpen(null);
-  setExpandedMobile(null);
-  setSearchOpen(false);
+  const frame = window.requestAnimationFrame(() => {
+    setOpenNav(null);
+    setAllCategoriesOpen(false);
+    setMobileOpen(false);
+    setMobileCategoryOpen(null);
+    setExpandedMobile(null);
+    setSearchOpen(false);
+  });
+  return () => window.cancelAnimationFrame(frame);
 }, [pathname]);
   const reducedMotion = useReducedMotion();
   const isNavItemActive = (slug: string) => {
@@ -146,7 +149,7 @@ export default function Header() {
           <div className="header-search-wrap" ref={searchRef}>
             <form className="header-search" action="/search" method="get" onSubmit={() => setSearchOpen(false)}>
               <span className="header-search-icon" aria-hidden="true"><Search size={21} strokeWidth={2.25} /></span>
-              <input type="search" name="q" value={query} onFocus={() => setSearchOpen(true)} onChange={(event) => { setQuery(event.target.value); setSearchOpen(true); }} placeholder="Search machines, parts and brands" aria-label="Search products" />
+              <input type="search" name="q" value={query} onFocus={() => setSearchOpen(true)} onChange={(event) => { setQuery(event.target.value); setSearchOpen(true); }} placeholder={translate("Search machines, parts and brands")} aria-label={translate("Search products")} />
             </form>
             <AnimatePresence>
               {searchOpen && query.trim() ? (
@@ -221,7 +224,7 @@ export default function Header() {
             >
               <div className="nav-item-link">
 
-                <Link href={item.href ?? `/products?category=${item.slug}`} className={isNavItemActive(item.slug) ? "is-active" : ""}>{item.label}</Link>
+                <Link href={item.href ?? `/products?category=${item.slug}`} className={isNavItemActive(item.slug) ? "is-active" : ""}>{translate(item.label)}</Link>
                 {item.children?.length ? (
                   <button
                     type="button"
@@ -243,7 +246,7 @@ export default function Header() {
                   <div className="mega-panel-links" role="menu">
                     {item.children.map((child) => (
                       <Link key={child.slug} href={child.href ?? `/products?tag=${child.slug}`} className={pathname.includes(child.slug) ? "is-active" : ""} role="menuitem" onClick={() => setOpenNav(null)}>
-                        <span>{child.label}</span><span aria-hidden="true">↗</span>
+                        <span>{translate(child.label)}</span><span aria-hidden="true">↗</span>
                       </Link>
                     ))}
                   </div>

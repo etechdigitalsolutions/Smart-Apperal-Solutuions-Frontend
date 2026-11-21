@@ -1,11 +1,15 @@
 
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, ArrowUp, Mail, MapPin, Phone, Clock3, Music2 } from "lucide-react";
 
 import config from "@/config";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Footer() {
+  const { translate } = useLanguage();
   return (
     <footer className="site-footer">
       <div className="container">
@@ -16,14 +20,12 @@ export default function Footer() {
             </Link>
 
             <p className="footer-description">
-              Industrial sewing, cutting and finishing machines for workshops
-              across Sri Lanka. Quality equipment and dependable support for
-              your business.
+              {translate("Industrial sewing, cutting and finishing machines for workshops across Sri Lanka. Quality equipment and dependable support for your business.")}
             </p>
 
             <div className="footer-newsletter-section">
-              <h4>Stay in the loop</h4>
-              <p>Subscribe to receive product updates and latest news.</p>
+              <h4>{translate("Stay in the loop")}</h4>
+              <p>{translate("Subscribe to receive product updates and latest news.")}</p>
 
               <div className="footer-newsletter">
                 <div className="footer-newsletter-input">
@@ -31,7 +33,7 @@ export default function Footer() {
                   <input
                     type="email"
                     aria-label="Email address"
-                    placeholder="Enter your email address"
+                    placeholder={translate("Enter your email address")}
                   />
                 </div>
 
@@ -40,7 +42,7 @@ export default function Footer() {
                   className="footer-newsletter-button"
                   aria-label="Subscribe to newsletter"
                 >
-                  Subscribe
+                  {translate("Subscribe")}
                   <ArrowRight size={17} aria-hidden="true" />
                 </button>
               </div>
@@ -55,29 +57,29 @@ export default function Footer() {
           </div>
 
           <div className="footer-column">
-            <h4>Product Index</h4>
+            <h4>{translate("Product Index")}</h4>
             <ul>
-              <li><Link href="/products?category=sewing-machines">Sewing Machines</Link></li>
-              <li><Link href="/products?category=cutting">Cutting</Link></li>
-              <li><Link href="/products?category=ironing-finishing">Ironing & Finishing</Link></li>
-              <li><Link href="/products?category=spare-parts">Spare Parts</Link></li>
-              <li><Link href="/products?category=accessories">Accessories</Link></li>
+              <li><Link href="/products?category=sewing-machines">{translate("Sewing Machines")}</Link></li>
+              <li><Link href="/products?category=cutting">{translate("Cutting")}</Link></li>
+              <li><Link href="/products?category=ironing-finishing">{translate("Ironing & Finishing")}</Link></li>
+              <li><Link href="/products?category=spare-parts">{translate("Spare Parts")}</Link></li>
+              <li><Link href="/products?category=accessories">{translate("Accessories")}</Link></li>
             </ul>
           </div>
 
           <div className="footer-column">
-            <h4>Customer Support</h4>
+            <h4>{translate("Customer Support")}</h4>
             <ul>
-              <li><Link href="/about">About Us</Link></li>
-              <li><Link href="/contact">Contact Us</Link></li>
-              <li><Link href="/track-order">Track Order</Link></li>
-              <li><Link href="/installments">Installments</Link></li>
-              <li><Link href="/services-repair">Services & Repair</Link></li>
+              <li><Link href="/about">{translate("About Us")}</Link></li>
+              <li><Link href="/contact">{translate("Contact Us")}</Link></li>
+              <li><Link href="/track-order">{translate("Track Order")}</Link></li>
+              <li><Link href="/installments">{translate("Installments")}</Link></li>
+              <li><Link href="/services-repair">{translate("Services & Repair")}</Link></li>
             </ul>
           </div>
 
           <div className="footer-column footer-contact-column">
-            <h4>Visit Our Showroom</h4>
+            <h4>{translate("Visit Our Showroom")}</h4>
 
             <div className="footer-contact-item">
               <MapPin size={18} aria-hidden="true" />
